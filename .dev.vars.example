@@ -1,0 +1,15 @@
+AUTH_MODE=none
+PUBLIC_ORIGIN=http://localhost:8787
+MCP_RESOURCE=http://localhost:8787
+COGNITIVE_RUNTIME_PROFILE=external
+LOG_SINK_ENABLED=false
+LOG_SINK_URL=https://logs.example.invalid/ingest
+LOG_SINK_TOKEN=replace-with-local-log-sink-token
+GITHUB_CLIENT_ID=replace-with-dedicated-oauth-app-client-id
+GITHUB_CLIENT_SECRET=replace-with-dedicated-oauth-app-client-secret
+ALLOWED_GITHUB_USER_IDS=
+ALLOWED_DCR_REDIRECT_URIS=
+COOKIE_ENCRYPTION_KEY=replace-with-32-random-bytes-base64url
+IDENTITY_HMAC_KEY=replace-with-32-random-bytes-base64url
+OPENROUTER_API_KEY=replace-with-openrouter-api-key
+NVIDIA_API_KEY=replace-with-nvidia-api-key

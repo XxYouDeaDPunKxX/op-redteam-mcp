@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, tests and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CI: "true"
+      WRANGLER_SEND_METRICS: "false"
+      RUN_COHERE_CANARY: "0"
+      RUN_GROQ_CANARY: "0"
+      RUN_NEW_FREE_ROUTES_CANARY: "0"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.14.0"
+          package-manager-cache: false
+
+      - name: Verify toolchain
+        run: |
+          node --version
+          npm --version
+          test "$(node --version)" = "v24.14.0"
+          test "$(npm --version)" = "11.9.0"
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Check project
+        run: npm run check

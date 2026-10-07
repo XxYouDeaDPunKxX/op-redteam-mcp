@@ -1,0 +1,50 @@
+{
+  "name": "op-redteam-mcp",
+  "version": "3.9.3",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.9.0",
+  "engines": {
+    "node": "24.14.0",
+    "npm": "11.9.0"
+  },
+  "scripts": {
+    "build": "npm run clean:dist && wrangler deploy --dry-run --env=\"\" --outdir dist",
+    "build:staging": "npm run preflight:staging && npm run clean:dist:staging && wrangler deploy --dry-run --env staging --outdir dist/staging",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "clean:dist": "node scripts/clean-build-output.mjs dist",
+    "clean:dist:staging": "node scripts/clean-build-output.mjs dist/staging",
+    "dev": "wrangler dev --local --var AUTH_MODE:none --var PUBLIC_ORIGIN:http://localhost:8787 --var MCP_RESOURCE:http://localhost:8787",
+    "preflight:staging": "node scripts/staging-preflight.mjs",
+    "test": "vitest run",
+    "test:tools": "vitest run test/sparring.test.ts",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "0.8.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "agents": "0.17.3",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "json-canonicalize": "2.0.0",
+    "zod": "4.4.3"
+  },
+  "overrides": {
+    "agents": {
+      "@modelcontextprotocol/sdk": "1.32.1"
+    },
+    "miniflare": {
+      "sharp": "0.35.5",
+      "undici": "7.29.1"
+    }
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.22.0",
+    "@cloudflare/workers-types": "5.20261006.1",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.124.0"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "op-redteam-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-13",
+  "compatibility_flags": ["nodejs_compat"],
+  "minify": true,
+  "define": {
+    "Cloudflare": "{\"compatibilityFlags\":{\"global_fetch_strictly_public\":true}}"
+  },
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.md"],
+      "fallthrough": true
+    }
+  ],
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "LOG_SINK_ENABLED": "false",
+    "LOG_SINK_URL": "https://logs.example.invalid/ingest"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "00000000000000000000000000000000"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 6,
+        "period": 60
+      }
+    }
+  ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "op_redteam_mcp"
+    }
+  ],
+  "version_metadata": {
+    "binding": "VERSION_METADATA"
+  },
+  "triggers": {
+    "crons": ["17 3 * * *"]
+  },
+  "env": {
+    "staging": {
+      "workers_dev": true,
+      "preview_urls": false,
+      "define": {
+        "Cloudflare": "{\"compatibilityFlags\":{\"global_fetch_strictly_public\":true}}"
+      },
+      "vars": {
+        "AUTH_MODE": "github",
+        "PUBLIC_ORIGIN": "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev",
+        "MCP_RESOURCE": "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev",
+        "COGNITIVE_RUNTIME_PROFILE": "external",
+        "ALLOWED_GITHUB_USER_IDS": "",
+        "ALLOWED_DCR_REDIRECT_URIS": "",
+        "LOG_SINK_ENABLED": "false",
+        "LOG_SINK_URL": "https://logs.example.invalid/ingest"
+      },
+      "secrets": {
+        "required": [
+          "GITHUB_CLIENT_ID",
+          "GITHUB_CLIENT_SECRET",
+          "COOKIE_ENCRYPTION_KEY",
+          "IDENTITY_HMAC_KEY",
+          "OPENROUTER_API_KEY",
+          "NVIDIA_API_KEY"
+        ]
+      },
+      "ai": {
+        "binding": "AI"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "OAUTH_KV",
+          "id": "00000000000000000000000000000000"
+        }
+      ],
+      "ratelimits": [
+        {
+          "name": "RATE_LIMITER",
+          "namespace_id": "1001",
+          "simple": {
+            "limit": 6,
+            "period": 60
+          }
+        }
+      ],
+      "analytics_engine_datasets": [
+        {
+          "binding": "ANALYTICS",
+          "dataset": "op_redteam_mcp_staging"
+        }
+      ],
+      "version_metadata": {
+        "binding": "VERSION_METADATA"
+      },
+      "triggers": {
+        "crons": ["17 3 * * *"]
+      }
+    }
+  }
+}
