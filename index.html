@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111313">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="OP Adversarial Pressure MCP brings bounded adversarial checks into work with an AI assistant. Explore the method, the eight tools, and the open-source project.">
+  <meta property="og:title" content="OP Adversarial Pressure MCP">
+  <meta property="og:description" content="What holds under pressure? Focused adversarial checks for ideas, plans, and artifacts.">
+  <meta property="og:type" content="website">
+  <!-- Publication note: canonical URL, og:url, og:image and GitHub Pages Discovery Set await a verified deployment root. -->
+  <title>OP Adversarial Pressure MCP — What holds under pressure?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #101212;
+    --ink-2: #191c1c;
+    --deep: #080a0a;
+    --paper: #f0efe8;
+    --paper-2: #dfdfd6;
+    --text: #f2f1eb;
+    --secondary: #afb3b0;
+    --subtle: #8e9694;
+    --line: #3b4140;
+    --signal: #f04c32;
+    --paper-ink: #202323;
+    --paper-rule: #a7aaa3;
+    --font-display: 'Barlow Condensed', Impact, 'Arial Narrow', sans-serif;
+    --font-body: 'IBM Plex Sans', Arial, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --page-padding: clamp(22px, 4.1vw, 72px);
+    --wide: 1540px;
+    --content: 1250px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:75px}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+  ::selection{color:var(--ink);background:var(--signal)}
+  a{color:inherit}
+  a:focus-visible, summary:focus-visible{outline:3px solid var(--signal);outline-offset:5px}
+  a:hover{text-underline-offset:4px}
+  .skip{position:absolute;z-index:100;top:-100px;left:15px;background:var(--paper);color:var(--ink);padding:12px 18px}
+  .skip:focus{top:12px}
+  .wrap{width:min(calc(100% - (var(--page-padding) * 2)),var(--wide));margin-inline:auto}
+  .measure{width:min(calc(100% - (var(--page-padding) * 2)),var(--content));margin-inline:auto}
+  .mono{font-family:var(--font-mono);font-size:11px;line-height:1.65;letter-spacing:.095em;text-transform:uppercase}
+  .signal{color:var(--signal)}
+  .nav-shell{border-bottom:1px solid var(--line);background:var(--ink);position:relative;z-index:3}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:30px;min-height:82px}
+  .brand{display:inline-flex;align-items:center;gap:13px;text-decoration:none;line-height:1}
+  .brand-mark{display:grid;place-items:center;background:var(--signal);color:var(--ink);font:900 25px/.8 var(--font-display);width:40px;height:40px;letter-spacing:-.06em}
+  .brand-name{font-weight:700;letter-spacing:.11em;font-size:13px;white-space:nowrap}
+  .brand-name span{color:var(--secondary);font-weight:500}
+  .navigation{display:flex;align-items:center;gap:clamp(16px,2.5vw,45px)}
+  .navigation a{font-size:12px;font-weight:600;text-decoration:none;color:var(--secondary);white-space:nowrap;transition:color .2s}
+  .navigation a:hover{color:var(--text)}
+  .navigation .nav-git{border:1px solid #747c78;display:inline-flex;align-items:center;gap:14px;padding:13px 17px;color:var(--text)}
+  .navigation .nav-git:hover{border-color:var(--signal);background:#202424}
+
+  /* Hero: editorial pressure-test specimen, no diagram or AI character illustration. */
+  .hero{position:relative;background:var(--ink);isolation:isolate;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:radial-gradient(#757a77 .55px,transparent .65px);background-size:7px 7px;mask-image:linear-gradient(to bottom,black,transparent 90%);z-index:-1}
+  .hero-shell{display:grid;grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr);min-height:min(820px,calc(100svh - 82px));align-items:stretch}
+  .hero-copy{display:flex;flex-direction:column;justify-content:center;padding:70px 18px 65px 0;max-width:780px}
+  .hero .kicker{display:flex;align-items:center;gap:13px;color:#c6cac6;margin:0 0 28px}
+  .kicker::before{content:"";width:36px;height:3px;display:inline-block;flex:0 0 auto;background:var(--signal)}
+  h1,h2,h3,p{margin-top:0}
+  h1{font-family:var(--font-display);font-size:clamp(84px,10.1vw,165px);font-weight:800;letter-spacing:-.027em;line-height:.76;margin:0 0 40px;max-width:790px;text-transform:uppercase}
+  h1 span{display:block}
+  h1 .slash{color:var(--signal);display:inline}
+  h1 span:last-child{font-size:.87em}
+  .hero-deck{font-size:clamp(18px,1.65vw,23px);line-height:1.45;max-width:555px;color:#d2d5cf;margin:0 0 30px;letter-spacing:-.016em}
+  .hero-deck strong{font-weight:600;color:var(--text)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .button{display:inline-flex;align-items:center;justify-content:space-between;gap:34px;min-height:54px;text-decoration:none;padding:15px 19px;font:600 12px var(--font-body);letter-spacing:.012em;transition:background .18s,border-color .18s,color .18s}
+  .button:after{content:"↗";font:500 18px var(--font-body)}
+  .button-primary{background:var(--signal);color:var(--deep);border:1px solid var(--signal)}
+  .button-primary:hover{background:#ff7259;border-color:#ff7259}
+  .button-outline{border:1px solid #747c78;color:var(--text)}
+  .button-outline:hover{border-color:var(--paper);background:#292e2e}
+  .hero-note{color:var(--subtle);margin:24px 0 0}
+  .hero-visual{display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;min-width:0;border-left:1px solid var(--line);background:
+    linear-gradient(90deg,transparent 98%,#262a29 98%),
+    repeating-linear-gradient(0deg,transparent 0,transparent 63px,#202424 64px),
+    #111414;overflow:hidden;min-height:560px}
+  .hero-visual::before{content:"";position:absolute;top:0;left:0;width:100%;height:9px;background:repeating-linear-gradient(90deg,var(--signal) 0 13px,transparent 13px 21px);opacity:.88}
+  .visual-top,.visual-bottom{position:absolute;z-index:2;left:24px;right:24px;display:flex;justify-content:space-between;color:#7b8280;pointer-events:none}
+  .visual-top{top:30px}.visual-bottom{bottom:23px}
+  .rig{display:block;width:min(92%,650px);height:auto;max-height:680px;filter:drop-shadow(18px 24px 12px #050606cc)}
+  .visual-label{position:absolute;right:18px;top:50%;writing-mode:vertical-rl;transform:translateY(-50%);color:#6a716e;letter-spacing:.3em}
+  .visual-bottom strong{font-weight:500;color:#c5cbc6}
+  .under-hero{border-top:1px solid #3a4140;background:var(--ink-2)}
+  .under-hero .wrap{display:flex;justify-content:space-between;align-items:center;gap:30px;min-height:75px}
+  .under-hero p{margin:0;color:#aeb5b1}
+  .under-hero p:last-child{color:#e4e8e1}
+  .under-hero span{color:var(--signal)}
+
+  .section-pad{padding:clamp(83px,10vw,153px) 0}
+  .label-line{display:flex;align-items:center;gap:16px;color:var(--signal);margin-bottom:28px}
+  .label-line::after{content:"";display:block;height:1px;width:60px;background:currentColor;opacity:.8}
+  .display-h2{font-family:var(--font-display);font-weight:700;text-transform:uppercase;line-height:.87;letter-spacing:-.015em;font-size:clamp(63px,7.4vw,118px);margin:0}
+  .section-intro{color:#c1c7c2;font-size:clamp(17px,1.45vw,20px);line-height:1.55;max-width:590px;margin:0}
+  .section-method{border-bottom:1px solid var(--line)}
+  .method-top{display:grid;grid-template-columns:1.07fr .93fr;gap:7%;align-items:end;margin-bottom:100px}
+  .method-top .section-intro{padding-bottom:9px}
+  .method-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #525955;border-bottom:1px solid #525955}
+  .method-unit{padding:32px 30px 36px;border-right:1px solid #525955;position:relative}
+  .method-unit:first-child{padding-left:0}.method-unit:last-child{border-right:0;padding-right:0}
+  .method-unit .counter{display:block;font:600 13px var(--font-mono);color:var(--signal);margin-bottom:31px}
+  .method-unit h3{font-family:var(--font-display);font-size:clamp(31px,3.3vw,49px);text-transform:uppercase;font-weight:600;line-height:.96;margin:0 0 18px}
+  .method-unit p{font-size:15px;color:#b6beb8;line-height:1.7;margin:0;max-width:330px}
+  .method-note{font-size:12px;line-height:1.8;color:#929b95;max-width:720px;margin:26px 0 0}
+
+  .case{color:var(--paper-ink);background:var(--paper);position:relative}
+  .case::before{content:"";position:absolute;top:0;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,var(--ink) 0,var(--ink) 28px,var(--signal) 28px,var(--signal) 42px)}
+  .case .label-line{color:#a12c1f}
+  .case .display-h2{max-width:880px}
+  .case-top{display:flex;align-items:end;justify-content:space-between;gap:10%;padding-top:8px;margin-bottom:62px}
+  .case-top .section-intro{max-width:340px;color:#4d5450;font-size:16px}
+  .case-demo{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--paper-rule);background:#e6e5dd}
+  .case-input,.case-pressure{padding:40px clamp(23px,4vw,68px) 45px;min-width:0}
+  .case-input{border-right:1px solid var(--paper-rule)}
+  .case-id{font:500 11px var(--font-mono);color:#535a55;letter-spacing:.08em;text-transform:uppercase;margin:0 0 33px}
+  .case-input h3{font:700 clamp(34px,3.3vw,52px)/.97 var(--font-display);letter-spacing:-.01em;text-transform:uppercase;max-width:360px;margin:0 0 40px}
+  .numbers{display:flex;gap:clamp(26px,4vw,66px);align-items:center}
+  .number span{display:block;font:600 11px var(--font-mono);text-transform:uppercase;letter-spacing:.12em;color:#646b66;margin-bottom:8px}
+  .number strong{display:block;font:700 clamp(75px,8vw,124px)/.9 var(--font-display);letter-spacing:-.04em;color:#202323}
+  .number:nth-child(2) strong{color:#b82d21}
+  .case-pressure{background:#101313;color:var(--paper);display:flex;flex-direction:column;justify-content:space-between}
+  .case-pressure .case-id{color:#a5aca6}
+  .case-pressure blockquote{margin:0 0 50px;font:600 clamp(34px,3.5vw,58px)/1.07 var(--font-display);text-transform:uppercase;letter-spacing:-.012em}
+  .case-pressure blockquote span{color:var(--signal)}
+  .case-pressure p{font-size:15px;color:#b7c0b9;line-height:1.65;margin:0;max-width:450px}
+  .case-disclaimer{font-size:11px;line-height:1.7;color:#5a615c;margin:22px 0 0}
+
+  .features{background:#e5e6de;color:#191c1b;border-bottom:1px solid #a4a9a2}
+  .features .label-line{color:#ac2e21}
+  .features-header{display:flex;align-items:end;justify-content:space-between;gap:8%;margin-bottom:70px}
+  .features-header p{max-width:350px;font-size:16px;line-height:1.65;color:#505a55;margin:0 0 6px}
+  .tool-table{border-top:2px solid #191c1b}
+  .tool-row{display:grid;grid-template-columns:70px 1fr 1.06fr;gap:40px;align-items:start;padding:25px 0 29px;border-bottom:1px solid #a3aaa3}
+  .tool-number{font:500 12px var(--font-mono);color:#a22e21;padding-top:11px}
+  .tool-title{font:700 clamp(28px,3.6vw,45px)/.98 var(--font-display);text-transform:uppercase;letter-spacing:.0em;margin:0}
+  .tool-tags{display:block;font:500 10px/1.5 var(--font-mono);color:#59615c;letter-spacing:.05em;margin-top:11px}
+  .tool-description{margin:2px 0 0;max-width:510px;font-size:16px;line-height:1.6;color:#4b5550}
+
+  .limits{background:#161919;border-bottom:1px solid var(--line)}
+  .limits-grid{display:grid;grid-template-columns:1fr .93fr;gap:8%;align-items:start}
+  .limits .display-h2{font-size:clamp(66px,7vw,110px)}
+  .limit-copy{padding-top:8px}
+  .limit-copy p{font-size:19px;line-height:1.55;color:#d0d5d0;margin:0 0 33px;max-width:550px}
+  .limit-copy ul{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+  .limit-copy li{display:grid;grid-template-columns:20px 1fr;gap:15px;border-bottom:1px solid var(--line);padding:19px 0;color:#b4bcb6;font-size:15px;line-height:1.55}
+  .limit-copy li:before{content:"/";font:700 18px var(--font-mono);color:var(--signal)}
+  .limit-copy strong{color:var(--text);font-weight:600}
+
+  .closing-cta{background:var(--signal);color:var(--deep);padding:90px 0 85px}
+  .closing-cta .measure{display:grid;grid-template-columns:1.1fr .9fr;gap:8%;align-items:end}
+  .closing-cta .mono{color:#321310}
+  .closing-cta h2{font:800 clamp(64px,7.6vw,124px)/.84 var(--font-display);text-transform:uppercase;letter-spacing:-.015em;margin:12px 0 0}
+  .closing-copy{max-width:440px}
+  .closing-copy p{font-size:18px;line-height:1.5;margin:0 0 28px;color:#251b19}
+  .closing-cta .button{background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+  .closing-cta .button:hover{background:#2c3230;border-color:#2c3230}
+  .closing-note{margin:14px 0 0;font:500 11px/1.7 var(--font-mono);color:#251310}
+
+  footer{background:var(--deep);padding:29px 0 33px}
+  .footer-inner{display:flex;justify-content:space-between;align-items:start;gap:45px;flex-wrap:wrap}
+  .footer-brand{font:700 21px var(--font-display);text-transform:uppercase;letter-spacing:.025em}
+  .footer-brand span{color:var(--signal)}
+  .footer-caption{font-size:12px;line-height:1.7;color:#929c96;max-width:340px;margin:7px 0 0}
+  .footer-links{display:flex;gap:18px 30px;flex-wrap:wrap;align-items:center;padding-top:4px}
+  .footer-links a{font:500 12px var(--font-body);color:#d3dad3;text-decoration:none}
+  .footer-links a:hover{color:var(--signal)}
+  .footer-under{border-top:1px solid #343939;margin-top:30px;padding-top:18px;font:400 10px/1.6 var(--font-mono);letter-spacing:.08em;color:#7d8781;text-transform:uppercase}
+
+  @media (max-width: 1200px){
+    h1{font-size:clamp(78px,10.3vw,125px)}
+    .hero-visual{min-height:570px}
+    .method-top{margin-bottom:75px}
+    .method-unit{padding-left:24px;padding-right:24px}
+  }
+  @media (max-width: 900px){
+    .navigation{gap:18px}
+    .navigation a[data-hide="tablet"]{display:none}
+    .hero-shell{grid-template-columns:1.05fr .95fr;min-height:610px}
+    h1{font-size:clamp(74px,10vw,102px)}
+    .hero-copy{padding:70px 14px 65px 0}
+    .hero-visual{min-height:580px}
+    .method-top{grid-template-columns:1fr;gap:28px}
+    .method-top .section-intro{max-width:720px}
+    .method-unit h3{font-size:34px}
+    .method-unit{padding-inline:16px}
+    .case-top,.features-header{align-items:start;flex-direction:column;gap:25px}
+    .case-top .section-intro,.features-header p{max-width:650px}
+    .limits-grid{grid-template-columns:1fr;gap:45px}
+    .limits .display-h2{max-width:650px}
+    .closing-cta .measure{grid-template-columns:1fr;gap:40px}
+    .closing-copy{max-width:540px}
+  }
+  @media (max-width: 700px){
+    .nav{min-height:72px}
+    .navigation a:not(.nav-git){display:none}
+    .hero-shell{grid-template-columns:minmax(0,1fr);min-height:0}
+    .hero-copy{padding:78px 0 52px}
+    h1{font-size:clamp(79px,15vw,130px);max-width:700px}
+    .hero-visual{border-left:0;border-top:1px solid var(--line);min-height:400px;max-height:510px}
+    .rig{max-height:520px;width:min(80%,460px)}
+    .under-hero .wrap{flex-wrap:wrap;padding-block:16px;gap:7px}
+    .method-grid{grid-template-columns:1fr}
+    .method-unit,.method-unit:first-child,.method-unit:last-child{padding:26px 0;border-right:0;border-bottom:1px solid #525955}
+    .method-unit:last-child{border-bottom:0}
+    .method-unit .counter{margin-bottom:12px}
+    .method-unit h3{font-size:43px}
+    .case-demo{grid-template-columns:1fr}
+    .case-input{border-right:0;border-bottom:1px solid var(--paper-rule)}
+    .case-input,.case-pressure{padding:34px 27px}
+    .case-pressure blockquote{margin:0 0 32px}
+    .tool-row{grid-template-columns:38px 1fr;gap:7px 18px}
+    .tool-description{grid-column:2}
+  }
+  @media (max-width: 580px){
+    .nav-git{min-height:43px;padding:11px 13px!important}
+    .brand-name{font-size:11px;letter-spacing:.07em}
+    .brand-mark{width:35px;height:35px;font-size:22px}
+    .hero-copy{padding:66px 0 48px;min-width:0}
+    .hero .kicker{font-size:9px;letter-spacing:.05em;margin-bottom:26px}
+    .kicker::before{width:21px}
+    h1{font-size:clamp(46px,14.5vw,84px);margin-bottom:27px}
+    .hero-deck{font-size:17px}
+    .hero-note{font-size:10px}
+    .hero-visual{min-height:365px;max-height:400px}
+    .rig{width:min(86%,370px)}
+    .visual-label{display:none}
+    .under-hero{font-size:10px}
+    .section-pad{padding:75px 0}
+    .label-line{font-size:10px;margin-bottom:20px}
+    .display-h2{font-size:clamp(45px,11vw,76px)}
+    .method-top{margin-bottom:47px}
+    .case-top{margin-bottom:36px}
+    .case-input h3{font-size:37px}
+    .number strong{font-size:92px}
+    .tool-title{font-size:34px}
+    .tool-description{font-size:15px}
+    .closing-cta{padding:76px 0 72px}
+    .closing-cta h2{font-size:clamp(45px,12vw,80px)}
+    .footer-inner{display:block}
+    .footer-links{margin-top:30px}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} .button,.navigation a{transition:none}}
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="nav-shell">
+    <div class="nav wrap">
+      <a class="brand" href="#top" aria-label="OP Adversarial Pressure MCP, top of page">
+        <span class="brand-mark" aria-hidden="true">OP</span>
+        <span class="brand-name">ADVERSARIAL <span>/ MCP</span></span>
+      </a>
+      <nav class="navigation" aria-label="Primary navigation">
+        <a href="#method" data-hide="tablet">The method</a>
+        <a href="#example" data-hide="tablet">A real-world example</a>
+        <a href="#tools">Eight tools</a>
+        <a class="nav-git" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-heading">
+      <div class="hero-shell wrap">
+        <div class="hero-copy">
+          <p class="kicker mono">OP Adversarial Pressure · Open-source MCP</p>
+          <h1 id="hero-heading"><span>What</span><span>holds</span><span>under<span class="slash">/</span></span><span>pressure?</span></h1>
+          <p class="hero-deck">An independent model puts one part of an idea, plan, or document to the test. <strong>Your assistant weighs the objection</strong> and keeps the work moving.</p>
+          <div class="actions">
+            <a class="button button-primary" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md" target="_blank" rel="noopener noreferrer">See how to connect it</a>
+            <a class="button button-outline" href="#method">How it works</a>
+          </div>
+          <p class="hero-note mono">One check at a time · No forced finding · Your decision stays yours</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="visual-top mono"><span>SUBJECT / A SINGLE CLAIM</span><span>TEST BENCH</span></div>
+          <svg class="rig" viewBox="0 0 600 690" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <defs>
+              <linearGradient id="steel" x1="0" y1="0" x2="1" y2=".6"><stop stop-color="#454a48"/><stop offset=".2" stop-color="#262a29"/><stop offset=".58" stop-color="#555c58"/><stop offset="1" stop-color="#1e2120"/></linearGradient>
+              <linearGradient id="paper" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#dddcd3"/><stop offset=".4" stop-color="#f2f1e9"/><stop offset="1" stop-color="#cdcdc5"/></linearGradient>
+              <pattern id="edge" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M0 26 L26 0" stroke="#b5b8b0" stroke-width=".6" opacity=".23"/></pattern>
+            </defs>
+            <g opacity=".9"><path d="M92 74h416M92 612h416" stroke="#353b38" stroke-width="3"/><path d="M95 70v547M504 70v547" stroke="#262b29" stroke-width="1" stroke-dasharray="4 10"/></g>
+            <g transform="rotate(-5 300 345)">
+              <rect x="154" y="98" width="300" height="520" fill="#090b0b" opacity=".6" transform="translate(13 16)"/>
+              <path d="M148 91 H450 V586 L433 598 L151 591Z" fill="url(#paper)"/>
+              <path d="M148 91 H450 V586 L433 598 L151 591Z" fill="url(#edge)"/>
+              <path d="M182 142 H421" stroke="#313633" stroke-width="2"/>
+              <text x="182" y="129" fill="#575d57" font-family="monospace" font-size="11" letter-spacing="4">SUBJECT 01</text>
+              <text x="180" y="209" fill="#282d29" font-family="Impact,Arial Narrow,sans-serif" font-size="51" font-weight="900" letter-spacing="-1">THE CLAIM.</text>
+              <path d="M182 247 H409 M182 263 H378 M182 279 H411 M182 295 H328" stroke="#535852" stroke-width="8"/>
+              <path d="M183 340 H405 M183 357 H373 M183 374 H408 M183 391 H351 M183 408 H388" stroke="#a5aaa1" stroke-width="6"/>
+              <text x="184" y="515" fill="#61645f" font-family="monospace" font-size="12" letter-spacing="2">EXAMINE WHAT HOLDS</text>
+              <path d="M179 528 H417" stroke="#5e635e" stroke-width="1"/>
+              <path d="M177 438 C233 420 346 433 403 443 M175 452 C239 436 331 447 408 459" stroke="#c53320" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path d="M411 436 C424 448 432 468 436 482" stroke="#c53320" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <path d="M169 432 C193 424 215 423 236 421" stroke="#c53320" stroke-width="2" fill="none"/>
+              <text x="186" y="565" fill="#b13c2c" font-family="monospace" font-size="20" font-weight="700" letter-spacing="2">?</text>
+            </g>
+            <!-- The upper and lower grips are intentionally physical; they do not represent process arrows. -->
+            <g>
+              <path d="M100 89 H510 L528 100 V153 L508 166 H100 L83 154V102Z" fill="#090b0b" transform="translate(11 13)" opacity=".65"/>
+              <path d="M100 89 H510 L528 100 V153 L508 166 H100 L83 154V102Z" fill="url(#steel)" stroke="#6c7470" stroke-width="2"/>
+              <path d="M94 151 H517" stroke="#0d0e0e" stroke-width="8"/>
+              <path d="M97 108 H509" stroke="#69716e" stroke-width="1"/>
+              <circle cx="127" cy="122" r="12" fill="#191d1c" stroke="#828982" stroke-width="3"/><path d="M119 122h16" stroke="#939a94" stroke-width="2"/>
+              <circle cx="477" cy="122" r="12" fill="#191d1c" stroke="#828982" stroke-width="3"/><path d="M469 122h16" stroke="#939a94" stroke-width="2"/>
+              <rect x="277" y="69" width="51" height="23" fill="#3c4340" stroke="#7d8580" stroke-width="2"/>
+              <rect x="289" y="37" width="27" height="40" fill="#333a37" stroke="#7d8580" stroke-width="2"/>
+              <path d="M302 11 V34" stroke="#9da69e" stroke-width="12" stroke-linecap="square"/>
+            </g>
+            <g>
+              <path d="M100 537 H510 L528 548 V601 L508 614 H100 L83 602V550Z" fill="#090b0b" transform="translate(11 13)" opacity=".65"/>
+              <path d="M100 537 H510 L528 548 V601 L508 614 H100 L83 602V550Z" fill="url(#steel)" stroke="#6c7470" stroke-width="2"/>
+              <path d="M94 551 H517" stroke="#0d0e0e" stroke-width="8"/>
+              <path d="M97 598 H509" stroke="#69716e" stroke-width="1"/>
+              <circle cx="127" cy="571" r="12" fill="#191d1c" stroke="#828982" stroke-width="3"/><path d="M119 571h16" stroke="#939a94" stroke-width="2"/>
+              <circle cx="477" cy="571" r="12" fill="#191d1c" stroke="#828982" stroke-width="3"/><path d="M469 571h16" stroke="#939a94" stroke-width="2"/>
+              <rect x="277" y="612" width="51" height="23" fill="#3c4340" stroke="#7d8580" stroke-width="2"/>
+              <rect x="289" y="632" width="27" height="34" fill="#333a37" stroke="#7d8580" stroke-width="2"/>
+              <path d="M302 667 V682" stroke="#9da69e" stroke-width="12" stroke-linecap="square"/>
+            </g>
+            <path d="M465 286 L514 285 L541 262" stroke="#f04c32" stroke-width="3" fill="none"/>
+            <circle cx="463" cy="286" r="6" fill="#f04c32"/>
+            <path d="M536 253L543 261L532 267" stroke="#f04c32" fill="none" stroke-width="3"/>
+          </svg>
+          <div class="visual-label mono">CONTROLLED LOAD</div>
+          <div class="visual-bottom mono"><span>FIG. 01 / NOT A VERDICT</span><strong>ONE POINT OF PRESSURE</strong></div>
+        </div>
+      </div>
+      <div class="under-hero"><div class="wrap mono"><p>Ideas <span>/</span> plans <span>/</span> documents <span>/</span> boundaries</p><p>Propose a challenge. Check the evidence. Continue.</p></div></div>
+    </section>
+
+    <section class="section-method section-pad" id="method" aria-labelledby="method-heading">
+      <div class="measure">
+        <p class="label-line mono">01 / The method</p>
+        <div class="method-top">
+          <h2 class="display-h2" id="method-heading">A second set<br>of teeth.</h2>
+          <p class="section-intro">Sometimes a plan sounds coherent because nobody has pressed on the assumption carrying it. OP Adversarial Pressure adds a focused, independent challenge inside the work you are already doing with an assistant.</p>
+        </div>
+        <div class="method-grid">
+          <div class="method-unit"><span class="counter">01 / TARGET</span><h3>Find the point.</h3><p>During a task, the assistant can choose a claim to test or ask the tool to locate a load-bearing assumption in the material provided.</p></div>
+          <div class="method-unit"><span class="counter">02 / PRESSURE</span><h3>Take one swing.</h3><p>A separate model returns a bounded challenge, possible failure path, structural review, or experiment to consider.</p></div>
+          <div class="method-unit"><span class="counter">03 / TRIAGE</span><h3>Keep what stands.</h3><p>The assistant checks the candidate against the source material and available evidence. Useful signal stays. Unsupported criticism goes.</p></div>
+        </div>
+        <p class="method-note">A connected assistant may decide when a check is useful. Connecting an MCP server alone does not guarantee that a particular assistant will invoke it. The server itself does not run chains of repeated checks.</p>
+      </div>
+    </section>
+
+    <section class="case section-pad" id="example" aria-labelledby="case-heading">
+      <div class="measure">
+        <p class="label-line mono">02 / One ordinary failure</p>
+        <div class="case-top">
+          <h2 class="display-h2" id="case-heading">The receipt<br>isn't the whole story.</h2>
+          <p class="section-intro">An example small enough to understand immediately, and consequential enough to expose a weak rule.</p>
+        </div>
+        <div class="case-demo">
+          <div class="case-input">
+            <p class="case-id">Proposed shopping-list rule</p>
+            <h3>Clear an item whenever its name appears on a receipt.</h3>
+            <div class="numbers">
+              <div class="number"><span>Requested</span><strong>03</strong></div>
+              <div class="number"><span>Bought</span><strong>01</strong></div>
+            </div>
+          </div>
+          <div class="case-pressure">
+            <p class="case-id">The bounded objection</p>
+            <blockquote>One carton bought.<br><span>Two still needed.</span></blockquote>
+            <p>The receipt supports a purchase, not completion of the request. Your assistant can verify that mismatch from the stated rule without inventing other problems with the app.</p>
+          </div>
+        </div>
+        <p class="case-disclaimer mono">Illustrative scenario from the project documentation; not a recorded model run.</p>
+      </div>
+    </section>
+
+    <section class="features section-pad" id="tools" aria-labelledby="tools-heading">
+      <div class="measure">
+        <p class="label-line mono">03 / The instruments</p>
+        <div class="features-header">
+          <h2 class="display-h2" id="tools-heading">Eight tools.<br>Different angles.</h2>
+          <p>Some tools probe a relation the assistant has already isolated. Others identify a plausible weak point in the supplied material. Every call stays limited to one target.</p>
+        </div>
+        <div class="tool-table">
+          <div class="tool-row"><span class="tool-number">01</span><div><h3 class="tool-title">Sparring</h3><span class="tool-tags">sparring_scan · sparring_pressure</span></div><p class="tool-description">Put an early idea under a specific kind of pressure, with or without a preselected mechanism.</p></div>
+          <div class="tool-row"><span class="tool-number">02</span><div><h3 class="tool-title">Structural stress</h3><span class="tool-tags">stress_structure · adversarial_review</span></div><p class="tool-description">Question a claimed connection or inspect the structure of one document or artifact.</p></div>
+          <div class="tool-row"><span class="tool-number">03</span><div><h3 class="tool-title">Failure paths</h3><span class="tool-tags">premortem_trace · premortem_scan</span></div><p class="tool-description">Work backward from a failed outcome or trace how a stated condition could make a plan fail.</p></div>
+          <div class="tool-row"><span class="tool-number">04</span><div><h3 class="tool-title">Boundaries &amp; tests</h3><span class="tool-tags">abuse_path · redteam_experiment</span></div><p class="tool-description">Consider a hypothetical abuse route or define one observable experiment inside authorized limits.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="limits section-pad" id="boundaries" aria-labelledby="limits-heading">
+      <div class="measure limits-grid">
+        <div><p class="label-line mono">04 / Where it stops</p><h2 class="display-h2" id="limits-heading">No critic<br>gets the<br>final word.</h2></div>
+        <div class="limit-copy">
+          <p>The second model can be wrong. A plausible objection is still a proposal until the assistant checks it. Not finding a flaw is also a valid outcome.</p>
+          <ul>
+            <li><span><strong>No forced break.</strong> A tool can report that it found no grounded challenge.</span></li>
+            <li><span><strong>No execution.</strong> Experiments and abuse paths are proposed, not performed.</span></li>
+            <li><span><strong>Decisions stay with you.</strong> A model response does not authorize a change or an action.</span></li>
+            <li><span><strong>Context goes to the model provider.</strong> Share only material you are allowed to send to that service.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing-cta" id="connect" aria-labelledby="connect-heading">
+      <div class="measure">
+        <div><p class="mono">Open source / MIT licensed</p><h2 id="connect-heading">Give the idea<br>something<br>to answer.</h2></div>
+        <div class="closing-copy"><p>Deploy the MCP in your cloud accounts and connect a compatible assistant. The setup guide covers the Worker, model providers, authentication, and client requirements.</p><a class="button" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md" target="_blank" rel="noopener noreferrer">Read the setup guide</a><p class="closing-note">The assistant selects checks; the server does not execute suggested actions.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="measure">
+      <div class="footer-inner">
+        <div><div class="footer-brand"><span>OP</span> Adversarial Pressure MCP</div><p class="footer-caption">A bounded adversarial instrument for assistants. Source, limits, and deployment instructions live in the public repository.</p></div>
+        <nav class="footer-links" aria-label="Project links">
+          <a href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp" target="_blank" rel="noopener noreferrer">Repository ↗</a>
+          <a href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/README.md" target="_blank" rel="noopener noreferrer">README ↗</a>
+          <a href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security ↗</a>
+          <a href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT license ↗</a>
+        </nav>
+      </div>
+      <p class="footer-under">An independent open-source project · See the repository for technical requirements</p>
+    </div>
+  </footer>
+</body>
+</html>
