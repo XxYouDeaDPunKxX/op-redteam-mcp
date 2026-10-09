@@ -1,3 +1,5 @@
+![OP Adversarial MCP banner](assets/Immagine%20ChatGPT%209%20ott%202026%2C%2020_32_25.png)
+
 # 🧭 OP Adversarial Pressure MCP
 
 OP Adversarial Pressure MCP lets your AI assistant ask another model to challenge an idea, plan, or line of reasoning while you work together. It adds a focused check at a useful moment: test an assumption, explore how a plan could fail, examine a document's structure, or propose an experiment.
