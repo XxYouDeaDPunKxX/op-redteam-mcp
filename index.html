@@ -4,13 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111313">
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="robots" content="index, follow">
   <meta name="description" content="OP Adversarial Pressure MCP brings bounded adversarial checks into work with an AI assistant. Explore the method, the eight tools, and the open-source project.">
   <meta property="og:title" content="OP Adversarial Pressure MCP">
   <meta property="og:description" content="What holds under pressure? Focused adversarial checks for ideas, plans, and artifacts.">
   <meta property="og:type" content="website">
-  <!-- Publication note: canonical URL, og:url, og:image and GitHub Pages Discovery Set await a verified deployment root. -->
+  <link rel="canonical" href="https://xxyoudeadpunkxx.github.io/op-redteam-mcp/">
+  <link rel="alternate" type="text/plain" href="https://xxyoudeadpunkxx.github.io/op-redteam-mcp/llms.txt" title="LLM-readable project index">
+  <link rel="alternate" type="application/json" href="https://xxyoudeadpunkxx.github.io/op-redteam-mcp/raw-manifest.json" title="Machine-readable project manifest">
+  <meta property="og:url" content="https://xxyoudeadpunkxx.github.io/op-redteam-mcp/">
+  <meta property="og:image" content="https://xxyoudeadpunkxx.github.io/op-redteam-mcp/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"OP Adversarial Pressure MCP","description":"Open-source MCP server for bounded adversarial checks invoked and evaluated by a compatible AI assistant.","url":"https://xxyoudeadpunkxx.github.io/op-redteam-mcp/","mainEntityOfPage":"https://xxyoudeadpunkxx.github.io/op-redteam-mcp/","codeRepository":"https://github.com/XxYouDeaDPunKxX/op-redteam-mcp","license":"https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/LICENSE","programmingLanguage":"TypeScript","runtimePlatform":"Cloudflare Workers","applicationCategory":"DeveloperApplication","isAccessibleForFree":true,"keywords":["Model Context Protocol","adversarial checks","reasoning review","AI assistants"]}</script>
   <title>OP Adversarial Pressure MCP — What holds under pressure?</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -141,11 +149,11 @@
   .features-header{display:flex;align-items:end;justify-content:space-between;gap:8%;margin-bottom:70px}
   .features-header p{max-width:350px;font-size:16px;line-height:1.65;color:#505a55;margin:0 0 6px}
   .tool-table{border-top:2px solid #191c1b}
-  .tool-row{display:grid;grid-template-columns:70px 1fr 1.06fr;gap:40px;align-items:start;padding:25px 0 29px;border-bottom:1px solid #a3aaa3}
-  .tool-number{font:500 12px var(--font-mono);color:#a22e21;padding-top:11px}
-  .tool-title{font:700 clamp(28px,3.6vw,45px)/.98 var(--font-display);text-transform:uppercase;letter-spacing:.0em;margin:0}
-  .tool-tags{display:block;font:500 10px/1.5 var(--font-mono);color:#59615c;letter-spacing:.05em;margin-top:11px}
-  .tool-description{margin:2px 0 0;max-width:510px;font-size:16px;line-height:1.6;color:#4b5550}
+  .tool-row{display:grid;grid-template-columns:54px minmax(0,.9fr) minmax(0,1.26fr);gap:clamp(16px,3.4vw,54px);align-items:start;padding:24px 0 28px;border-bottom:1px solid #a3aaa3}
+  .tool-number{font:600 12px var(--font-mono);color:#a22e21;padding-top:5px}
+  .tool-title{font:600 clamp(16px,1.65vw,26px)/1.2 var(--font-mono);text-transform:none;letter-spacing:-.055em;margin:0;overflow-wrap:anywhere}
+  .tool-tags{display:block;font:500 10px/1.5 var(--font-mono);color:#59615c;letter-spacing:.065em;text-transform:uppercase;margin-top:10px}
+  .tool-description{margin:0;max-width:750px;font-size:clamp(15px,1.13vw,18px);line-height:1.55;color:#3f4843}
 
   .limits{background:#161919;border-bottom:1px solid var(--line)}
   .limits-grid{display:grid;grid-template-columns:1fr .93fr;gap:8%;align-items:start}
@@ -176,6 +184,8 @@
   .footer-links a{font:500 12px var(--font-body);color:#d3dad3;text-decoration:none}
   .footer-links a:hover{color:var(--signal)}
   .footer-under{border-top:1px solid #343939;margin-top:30px;padding-top:18px;font:400 10px/1.6 var(--font-mono);letter-spacing:.08em;color:#7d8781;text-transform:uppercase}
+  .machine-links{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;margin:25px 0 0;font:500 10px/1.6 var(--font-mono);color:#95a19b;letter-spacing:.035em}
+  .machine-links a{color:#adb6b0;text-decoration:underline;text-decoration-color:#63706a;text-underline-offset:3px}
 
   @media (max-width: 1200px){
     h1{font-size:clamp(78px,10.3vw,125px)}
@@ -219,7 +229,7 @@
     .case-input{border-right:0;border-bottom:1px solid var(--paper-rule)}
     .case-input,.case-pressure{padding:34px 27px}
     .case-pressure blockquote{margin:0 0 32px}
-    .tool-row{grid-template-columns:38px 1fr;gap:7px 18px}
+    .tool-row{grid-template-columns:35px minmax(0,1fr);gap:9px 13px;padding:22px 0}
     .tool-description{grid-column:2}
   }
   @media (max-width: 580px){
@@ -243,7 +253,7 @@
     .case-top{margin-bottom:36px}
     .case-input h3{font-size:37px}
     .number strong{font-size:92px}
-    .tool-title{font-size:34px}
+    .tool-title{font-size:clamp(17px,4.8vw,23px)}
     .tool-description{font-size:15px}
     .closing-cta{padding:76px 0 72px}
     .closing-cta h2{font-size:clamp(45px,12vw,80px)}
@@ -276,7 +286,7 @@
         <div class="hero-copy">
           <p class="kicker mono">OP Adversarial Pressure · Open-source MCP</p>
           <h1 id="hero-heading"><span>What</span><span>holds</span><span>under<span class="slash">/</span></span><span>pressure?</span></h1>
-          <p class="hero-deck">An independent model puts one part of an idea, plan, or document to the test. <strong>Your assistant weighs the objection</strong> and keeps the work moving.</p>
+          <p class="hero-deck">A separate model challenges one part of an idea, plan, or document. <strong>Your assistant checks the objection</strong> before deciding what deserves to stay.</p>
           <div class="actions">
             <a class="button button-primary" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md" target="_blank" rel="noopener noreferrer">See how to connect it</a>
             <a class="button button-outline" href="#method">How it works</a>
@@ -346,15 +356,15 @@
       <div class="measure">
         <p class="label-line mono">01 / The method</p>
         <div class="method-top">
-          <h2 class="display-h2" id="method-heading">A second set<br>of teeth.</h2>
-          <p class="section-intro">Sometimes a plan sounds coherent because nobody has pressed on the assumption carrying it. OP Adversarial Pressure adds a focused, independent challenge inside the work you are already doing with an assistant.</p>
+          <h2 class="display-h2" id="method-heading">Give the claim<br>some resistance.</h2>
+          <p class="section-intro">A plan can sound convincing because its weak assumptions have never been tested. OP Adversarial Pressure gives your assistant a second model to challenge one point while the task is underway.</p>
         </div>
         <div class="method-grid">
-          <div class="method-unit"><span class="counter">01 / TARGET</span><h3>Find the point.</h3><p>During a task, the assistant can choose a claim to test or ask the tool to locate a load-bearing assumption in the material provided.</p></div>
-          <div class="method-unit"><span class="counter">02 / PRESSURE</span><h3>Take one swing.</h3><p>A separate model returns a bounded challenge, possible failure path, structural review, or experiment to consider.</p></div>
-          <div class="method-unit"><span class="counter">03 / TRIAGE</span><h3>Keep what stands.</h3><p>The assistant checks the candidate against the source material and available evidence. Useful signal stays. Unsupported criticism goes.</p></div>
+          <div class="method-unit"><span class="counter">01 / SELECT</span><h3>Choose what matters.</h3><p>The assistant identifies a claim to test, or asks one of the tools to find a mechanism the idea depends on.</p></div>
+          <div class="method-unit"><span class="counter">02 / CHALLENGE</span><h3>Press on one point.</h3><p>A separate model proposes one bounded objection, failure path, structural challenge, or test.</p></div>
+          <div class="method-unit"><span class="counter">03 / EVALUATE</span><h3>Judge the objection.</h3><p>The assistant compares it with the supplied material and available evidence. It may use the result, qualify it, or reject it.</p></div>
         </div>
-        <p class="method-note">A connected assistant may decide when a check is useful. Connecting an MCP server alone does not guarantee that a particular assistant will invoke it. The server itself does not run chains of repeated checks.</p>
+        <p class="method-note">The assistant chooses whether and when to invoke a tool; installing the MCP alone does not guarantee use. Each call is isolated. The server does not trigger repeat checks or execute proposed actions.</p>
       </div>
     </section>
 
@@ -363,7 +373,7 @@
         <p class="label-line mono">02 / One ordinary failure</p>
         <div class="case-top">
           <h2 class="display-h2" id="case-heading">The receipt<br>isn't the whole story.</h2>
-          <p class="section-intro">An example small enough to understand immediately, and consequential enough to expose a weak rule.</p>
+          <p class="section-intro">A normal product decision with one assumption worth testing.</p>
         </div>
         <div class="case-demo">
           <div class="case-input">
@@ -377,7 +387,7 @@
           <div class="case-pressure">
             <p class="case-id">The bounded objection</p>
             <blockquote>One carton bought.<br><span>Two still needed.</span></blockquote>
-            <p>The receipt supports a purchase, not completion of the request. Your assistant can verify that mismatch from the stated rule without inventing other problems with the app.</p>
+            <p>One purchase does not satisfy a request for three. The assistant can verify this objection from the stated rule, without assuming other defects in the app.</p>
           </div>
         </div>
         <p class="case-disclaimer mono">Illustrative scenario from the project documentation; not a recorded model run.</p>
@@ -386,16 +396,20 @@
 
     <section class="features section-pad" id="tools" aria-labelledby="tools-heading">
       <div class="measure">
-        <p class="label-line mono">03 / The instruments</p>
+        <p class="label-line mono">03 / Every instrument, individually</p>
         <div class="features-header">
-          <h2 class="display-h2" id="tools-heading">Eight tools.<br>Different angles.</h2>
-          <p>Some tools probe a relation the assistant has already isolated. Others identify a plausible weak point in the supplied material. Every call stays limited to one target.</p>
+          <h2 class="display-h2" id="tools-heading">Eight tools.<br>Eight precise jobs.</h2>
+          <p>Different questions call for different tests. Each tool handles one bounded target, and the assistant decides whether its answer is useful.</p>
         </div>
-        <div class="tool-table">
-          <div class="tool-row"><span class="tool-number">01</span><div><h3 class="tool-title">Sparring</h3><span class="tool-tags">sparring_scan · sparring_pressure</span></div><p class="tool-description">Put an early idea under a specific kind of pressure, with or without a preselected mechanism.</p></div>
-          <div class="tool-row"><span class="tool-number">02</span><div><h3 class="tool-title">Structural stress</h3><span class="tool-tags">stress_structure · adversarial_review</span></div><p class="tool-description">Question a claimed connection or inspect the structure of one document or artifact.</p></div>
-          <div class="tool-row"><span class="tool-number">03</span><div><h3 class="tool-title">Failure paths</h3><span class="tool-tags">premortem_trace · premortem_scan</span></div><p class="tool-description">Work backward from a failed outcome or trace how a stated condition could make a plan fail.</p></div>
-          <div class="tool-row"><span class="tool-number">04</span><div><h3 class="tool-title">Boundaries &amp; tests</h3><span class="tool-tags">abuse_path · redteam_experiment</span></div><p class="tool-description">Consider a hypothetical abuse route or define one observable experiment inside authorized limits.</p></div>
+        <div class="tool-table" role="list" aria-label="The eight MCP tools">
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 1 of 8">01</span><div><h3 class="tool-title">stress_structure</h3><span class="tool-tags">Test one claimed connection</span></div><p class="tool-description">Tests whether the supplied material supports a direct challenge to a stated link between a mechanism and its intended outcome.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 2 of 8">02</span><div><h3 class="tool-title">sparring_pressure</h3><span class="tool-tags">Assistant-selected pressure</span></div><p class="tool-description">The assistant picks a point in an early idea and an angle of attack. The model proposes a hypothetical change and its direct effect.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 3 of 8">03</span><div><h3 class="tool-title">sparring_scan</h3><span class="tool-tags">Find the fragile mechanism</span></div><p class="tool-description">Starting with an early idea and its exact goal, the model identifies one load-bearing mechanism and applies pressure without replacing the idea.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 4 of 8">04</span><div><h3 class="tool-title">premortem_trace</h3><span class="tool-tags">Trace a known condition</span></div><p class="tool-description">Follows one failure condition already present in a plan through a mechanism to a specified failed outcome.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 5 of 8">05</span><div><h3 class="tool-title">premortem_scan</h3><span class="tool-tags">Assume the outcome failed</span></div><p class="tool-description">Works backward from one failed goal to suggest a possible initiating cause and causal path through the supplied plan.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 6 of 8">06</span><div><h3 class="tool-title">abuse_path</h3><span class="tool-tags">Follow a bounded abuse route</span></div><p class="tool-description">Explores a hypothetical path from stated access through a named control to the outcome that control protects. No attack is performed.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 7 of 8">07</span><div><h3 class="tool-title">adversarial_review</h3><span class="tool-tags">Review one structure</span></div><p class="tool-description">Looks for a structural weakness in one supplied artifact and suggests a minimal correction. The assistant checks whether it holds.</p></article>
+          <article class="tool-row" role="listitem"><span class="tool-number" aria-label="Tool 8 of 8">08</span><div><h3 class="tool-title">redteam_experiment</h3><span class="tool-tags">Propose a falsifiable test</span></div><p class="tool-description">Designs one experiment with observable results using only the actions expressly allowed. The tool does not execute it.</p></article>
         </div>
       </div>
     </section>
@@ -404,7 +418,7 @@
       <div class="measure limits-grid">
         <div><p class="label-line mono">04 / Where it stops</p><h2 class="display-h2" id="limits-heading">No critic<br>gets the<br>final word.</h2></div>
         <div class="limit-copy">
-          <p>The second model can be wrong. A plausible objection is still a proposal until the assistant checks it. Not finding a flaw is also a valid outcome.</p>
+          <p>The model behind a tool can be wrong. Its objection is a candidate, not evidence by itself. The assistant checks the material; if no grounded weakness emerges, nothing needs to be invented.</p>
           <ul>
             <li><span><strong>No forced break.</strong> A tool can report that it found no grounded challenge.</span></li>
             <li><span><strong>No execution.</strong> Experiments and abuse paths are proposed, not performed.</span></li>
@@ -418,7 +432,7 @@
     <section class="closing-cta" id="connect" aria-labelledby="connect-heading">
       <div class="measure">
         <div><p class="mono">Open source / MIT licensed</p><h2 id="connect-heading">Give the idea<br>something<br>to answer.</h2></div>
-        <div class="closing-copy"><p>Deploy the MCP in your cloud accounts and connect a compatible assistant. The setup guide covers the Worker, model providers, authentication, and client requirements.</p><a class="button" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md" target="_blank" rel="noopener noreferrer">Read the setup guide</a><p class="closing-note">The assistant selects checks; the server does not execute suggested actions.</p></div>
+        <div class="closing-copy"><p>The repository explains how to deploy the MCP and connect a compatible assistant. It includes provider setup, authentication, and client requirements.</p><a class="button" href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md" target="_blank" rel="noopener noreferrer">Read the setup guide</a><p class="closing-note">The assistant selects checks; the server does not execute suggested actions.</p></div>
       </div>
     </section>
   </main>
@@ -433,7 +447,8 @@
           <a href="https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT license ↗</a>
         </nav>
       </div>
-      <p class="footer-under">An independent open-source project · See the repository for technical requirements</p>
+      <nav class="machine-links" aria-label="Machine-readable project files"><span>Machine-readable</span><a href="llms.txt">llms.txt</a><a href="raw-manifest.json">manifest</a><a href="sitemap.xml">sitemap</a></nav>
+      <p class="footer-under">An independent MIT-licensed project · Technical requirements and source are in the repository</p>
     </div>
   </footer>
 </body>

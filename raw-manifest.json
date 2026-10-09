@@ -1,0 +1,66 @@
+{
+  "name": "OP Adversarial Pressure MCP",
+  "type": "SoftwareSourceCode",
+  "description": "A remote MCP server offering eight bounded adversarial checks that an AI assistant can invoke during a task and evaluate.",
+  "repository": "https://github.com/XxYouDeaDPunKxX/op-redteam-mcp",
+  "source_branch": "main",
+  "landing_branch": "gh-pages",
+  "language": "TypeScript",
+  "license": "MIT",
+  "publication": {
+    "status": "prepared-for-publishing",
+    "pages_type": "PROJECT_SITE",
+    "site_root": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/",
+    "domain_root": "https://xxyoudeadpunkxx.github.io/",
+    "discovery_root": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/",
+    "canonical_url": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/",
+    "custom_domain": "NONE",
+    "source_branch": "gh-pages",
+    "source_path": "/",
+    "machine_files": {
+      "llms": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/llms.txt",
+      "manifest": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/raw-manifest.json",
+      "sitemap": "https://xxyoudeadpunkxx.github.io/op-redteam-mcp/sitemap.xml"
+    }
+  },
+  "tools": [
+    {
+      "name": "stress_structure",
+      "purpose": "Tests whether the supplied material supports a direct challenge to a stated link between a mechanism and its intended outcome."
+    },
+    {
+      "name": "sparring_pressure",
+      "purpose": "The assistant picks a point in an early idea and an angle of attack. The model proposes a hypothetical change and its direct effect."
+    },
+    {
+      "name": "sparring_scan",
+      "purpose": "Starting with an early idea and its exact goal, the model identifies one load-bearing mechanism and applies pressure without replacing the idea."
+    },
+    {
+      "name": "premortem_trace",
+      "purpose": "Follows one failure condition already present in a plan through a mechanism to a specified failed outcome."
+    },
+    {
+      "name": "premortem_scan",
+      "purpose": "Works backward from one failed goal to suggest a possible initiating cause and causal path through the supplied plan."
+    },
+    {
+      "name": "abuse_path",
+      "purpose": "Explores a hypothetical path from stated access through a named control to the outcome that control protects. No attack is performed."
+    },
+    {
+      "name": "adversarial_review",
+      "purpose": "Looks for a structural weakness in one supplied artifact and suggests a minimal correction. The assistant checks whether it holds."
+    },
+    {
+      "name": "redteam_experiment",
+      "purpose": "Designs one experiment with observable results using only the actions expressly allowed. The tool does not execute it."
+    }
+  ],
+  "documentation": {
+    "README": "https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/README.md",
+    "getting_started": "https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md",
+    "security": "https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/SECURITY.md",
+    "license": "https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/LICENSE"
+  }
+}

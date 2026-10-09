@@ -1,0 +1,5 @@
+# Project-level companion; NOT authoritative at this subpath.
+User-agent: *
+Allow: /
+
+Sitemap: https://xxyoudeadpunkxx.github.io/op-redteam-mcp/sitemap.xml

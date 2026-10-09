@@ -1,0 +1,25 @@
+# OP Adversarial Pressure MCP
+
+[Project website](https://xxyoudeadpunkxx.github.io/op-redteam-mcp/)
+
+A remote Model Context Protocol server that lets a compatible AI assistant ask a second model to challenge a claim, idea, plan, or document during a task. The calling assistant evaluates the candidate; the MCP never makes the user's decisions.
+
+## Authoritative project resources
+- [Repository](https://github.com/XxYouDeaDPunKxX/op-redteam-mcp)
+- [README](https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/README.md)
+- [Getting started](https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/GETTING-STARTED.md)
+- [Adapter compatibility](https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/docs/ADAPTER-COMPATIBILITY.md)
+- [Security policy](https://github.com/XxYouDeaDPunKxX/op-redteam-mcp/blob/main/SECURITY.md)
+
+## Tools
+- `stress_structure` — test one explicit connection between mechanism and intended result.
+- `sparring_pressure` — test an early idea at a point and angle selected by the assistant.
+- `sparring_scan` — identify and pressure one load-bearing mechanism within an early idea.
+- `premortem_trace` — trace a stated failure condition through a plan.
+- `premortem_scan` — hypothesize a path to one assumed failed outcome.
+- `abuse_path` — explore one hypothetical abuse route through stated access and a control.
+- `adversarial_review` — examine the structure of one supplied artifact.
+- `redteam_experiment` — design one bounded, falsifiable experiment without executing it.
+
+## Boundaries
+A generated challenge is a candidate, not a finding. The calling assistant decides whether the evidence supports it. No result guarantees correctness, and an absence of grounded criticism is acceptable. Tool calls may send selected task material to external model providers. Deployment and connectivity depend on the client's supported capabilities.
