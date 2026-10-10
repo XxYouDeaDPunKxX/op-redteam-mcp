@@ -40,8 +40,8 @@
     --font-body: 'IBM Plex Sans', Arial, sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
     --page-padding: clamp(20px, 2.4vw, 54px);
-    --wide: 2320px;
-    --content: 2160px;
+    --wide: 1760px;
+    --content: 1580px;
   }
   *,*::before,*::after{box-sizing:border-box}
   html{scroll-behavior:smooth;scroll-padding-top:75px}
@@ -187,6 +187,27 @@
   .machine-links{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;margin:25px 0 0;font:500 10px/1.6 var(--font-mono);color:#95a19b;letter-spacing:.035em}
   .machine-links a{color:#adb6b0;text-decoration:underline;text-decoration-color:#63706a;text-underline-offset:3px}
 
+  /* Wide-screen type settles before the desktop grid changes proportions. */
+  @media (min-width: 1441px){
+    h1{font-size:clamp(145px,9vw,150px)}
+    .display-h2{font-size:clamp(107px,7vw,110px)}
+    .section-pad{padding:clamp(139px,9vw,149px) 0}
+    .method-top{grid-template-columns:minmax(0,1.23fr) minmax(0,.77fr);gap:clamp(60px,4.5vw,75px)}
+  }
+  /* Desktop rhythm: outer frame, reading width and internal scale are independent. */
+  @media (min-width: 1600px){
+    .hero-shell{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr)}
+    .hero-copy{max-width:840px;padding-block:58px 54px}
+    h1{max-width:830px;margin-bottom:34px}
+    .hero-deck{max-width:590px}
+    .method-top{margin-bottom:82px}
+    .method-unit p{max-width:400px}
+    .features-header p{max-width:420px}
+    .case-top .section-intro{max-width:420px}
+    .case-input h3{max-width:430px}
+    .tool-description{max-width:680px}
+  }
+
   @media (max-width: 1200px){
     h1{font-size:clamp(78px,10.3vw,125px)}
     .hero-visual{min-height:570px}
@@ -210,6 +231,13 @@
     .limits .display-h2{max-width:650px}
     .closing-cta .measure{grid-template-columns:1fr;gap:40px}
     .closing-copy{max-width:540px}
+  }
+  /* The hero becomes an editorial stack before its two columns get cramped. */
+  @media (min-width: 701px) and (max-width: 960px){
+    .hero-shell{grid-template-columns:minmax(0,1fr);min-height:0}
+    .hero-copy{max-width:none;padding:68px 0 56px}
+    .hero-visual{border-left:0;border-top:1px solid var(--line);min-height:480px;max-height:560px}
+    .rig{width:min(76%,455px);max-height:520px}
   }
   @media (max-width: 700px){
     .nav{min-height:72px}
