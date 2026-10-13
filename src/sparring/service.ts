@@ -1,6 +1,7 @@
 import { findSecretLikeValue } from "../contracts/secrets";
 import type { ReviewIdentity } from "../contracts/types";
 import type { ProviderUsage } from "../providers/common";
+import { invokeGptPrimary, type ProviderMeta } from "../providers/gpt-primary";
 import type { Env } from "../env";
 import { reviewRateKey, sessionAffinity } from "../security/identity";
 import { invokeSparringModel } from "./adapter";
@@ -18,8 +19,8 @@ import type {
 } from "./request";
 
 export type SparringServiceResult =
-  | { kind: "success"; text: string; providerLatencyMs: number; usage?: ProviderUsage }
-  | { kind: "error"; code: string; diagnosticCode?: string; providerLatencyMs: number; usage?: ProviderUsage }
+  | { kind: "success"; text: string; providerLatencyMs: number; usage?: ProviderUsage; providerMeta?: ProviderMeta }
+  | { kind: "error"; code: string; diagnosticCode?: string; providerLatencyMs: number; usage?: ProviderUsage; providerMeta?: ProviderMeta }
   | { kind: "rate_limited" };
 
 export type ModelOutputDiagnostic =
@@ -302,6 +303,34 @@ export function validateAbusePathOutput(
   return inspectAbusePathOutput(value, accessQuote, controlQuote, protectedOutcomeQuote).accepted;
 }
 
+function inspectToolOutput(tool: SparringToolName, input: SparringInput, content: string): OutputInspection {
+  return tool === "stress_structure"
+    ? inspectStressStructureOutput(content, (input as StressStructureInput).artifact_excerpt)
+    : tool === "adversarial_review"
+      ? inspectAdversarialReviewOutput(content)
+    : tool === "sparring_pressure"
+      ? inspectSparringPressureOutput(content)
+      : tool === "sparring_scan"
+        ? inspectSparringScanOutput(content, (input as SparringScanInput).idea)
+      : tool === "redteam_experiment"
+        ? inspectRedteamExperimentOutput(content)
+      : tool === "premortem_scan"
+        ? inspectPremortemScanOutput(content)
+      : tool === "premortem_trace"
+          ? inspectPremortemTraceOutput(
+                content,
+                (input as PremortemTraceInput).plan_excerpt,
+                (input as PremortemTraceInput).failure_condition_quote,
+                (input as PremortemTraceInput).assumed_failure,
+              )
+          : inspectAbusePathOutput(
+                content,
+                (input as AbusePathInput).access_quote,
+                (input as AbusePathInput).control_quote,
+                (input as AbusePathInput).protected_outcome_quote,
+              );
+}
+
 export async function executeAdversarial(
   tool: SparringToolName,
   input: SparringInput,
@@ -314,36 +343,15 @@ export async function executeAdversarial(
   if (!rate.success) return { kind: "rate_limited" };
 
   const affinity = await sessionAffinity(env.IDENTITY_HMAC_KEY, identity.github_user_id);
-  const model = await invokeSparringModel(env, tool, input, affinity);
+  const model = env.COGNITIVE_GPT_PRIMARY_ENABLED === "true" && env.COGNITIVE_RUNTIME_PROFILE === "external"
+    ? await invokeGptPrimary(env, tool, input, affinity, (content) => inspectToolOutput(tool, input, content))
+    : await invokeSparringModel(env, tool, input, affinity);
+  const providerMeta = "providerMeta" in model ? model.providerMeta as ProviderMeta : undefined;
   if (model.kind === "failure") {
-    return { kind: "error", code: model.status, diagnosticCode: `provider_${model.category}`, providerLatencyMs: model.latencyMs };
+    return { kind: "error", code: model.status, diagnosticCode: `provider_${model.category}`, providerLatencyMs: model.latencyMs, ...(providerMeta ? { providerMeta } : {}) };
   }
 
-  const inspection: OutputInspection = tool === "stress_structure"
-    ? inspectStressStructureOutput(model.content, (input as StressStructureInput).artifact_excerpt)
-    : tool === "adversarial_review"
-      ? inspectAdversarialReviewOutput(model.content)
-    : tool === "sparring_pressure"
-      ? inspectSparringPressureOutput(model.content)
-      : tool === "sparring_scan"
-        ? inspectSparringScanOutput(model.content, (input as SparringScanInput).idea)
-      : tool === "redteam_experiment"
-        ? inspectRedteamExperimentOutput(model.content)
-      : tool === "premortem_scan"
-        ? inspectPremortemScanOutput(model.content)
-      : tool === "premortem_trace"
-          ? inspectPremortemTraceOutput(
-                model.content,
-                (input as PremortemTraceInput).plan_excerpt,
-                (input as PremortemTraceInput).failure_condition_quote,
-                (input as PremortemTraceInput).assumed_failure,
-              )
-          : inspectAbusePathOutput(
-                model.content,
-                (input as AbusePathInput).access_quote,
-                (input as AbusePathInput).control_quote,
-                (input as AbusePathInput).protected_outcome_quote,
-              );
+  const inspection = inspectToolOutput(tool, input, model.content);
   const accepted = inspection.accepted;
   if (!accepted) {
     return {
@@ -352,6 +360,7 @@ export async function executeAdversarial(
       diagnosticCode: inspection.diagnostic ?? "postflight_invariant_failure",
       providerLatencyMs: model.latencyMs,
       ...(model.usage ? { usage: model.usage } : {}),
+      ...(providerMeta ? { providerMeta } : {}),
     };
   }
   return {
@@ -359,6 +368,7 @@ export async function executeAdversarial(
     text: accepted,
     providerLatencyMs: model.latencyMs,
     ...(model.usage ? { usage: model.usage } : {}),
+    ...(providerMeta ? { providerMeta } : {}),
   };
 }
 

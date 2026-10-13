@@ -8,7 +8,7 @@ A plausible explanation can still rest on a weak connection. The project separat
 
 MCP, the Model Context Protocol, is how an assistant connects to these tools. You continue the conversation in your usual assistant. The assistant selects a tool, supplies the relevant context, and evaluates the response.
 
-🚀 [Configure your deployment and connect an assistant](docs/GETTING-STARTED.md#4-prepare-a-remote-deployment). Local developer checks are covered separately in the technical section below.
+🚀 [Configure your deployment and connect an assistant](docs/GETTING-STARTED.md#4-prepare-a-remote-deployment). For a personal DIY setup, the recommended choice is a free ChatGPT account as primary with the existing NVIDIA/OpenRouter routes as direct fallback. A separate ChatGPT account helps keep the new conversation created for every model request out of your main conversation list. The NVIDIA/OpenRouter-only setup remains available. See the [ChatGPT setup guide](docs/CHATGPT-SETUP.md). Local developer checks are covered separately in the technical section below.
 
 ## 🔄 How it fits into a conversation
 
@@ -18,7 +18,7 @@ MCP, the Model Context Protocol, is how an assistant connects to these tools. Yo
 4. 🔎 The assistant checks the candidate against the supplied material and available evidence. It can use a supported result, develop an interpretation with explicit limits on what that evidence supports, or discard it.
 5. ➡️ The assistant continues the task with you, explaining what the check supports and what remains uncertain.
 
-A check can be useful while an idea is taking shape, when a dependency becomes clear, or as a plan changes. Further checks can occur at different moments in the same conversation, one at a time. Each check is bounded; the server makes no automatic retry, fallback, or cascade of tool calls.
+A check can be useful while an idea is taking shape, when a dependency becomes clear, or as a plan changes. Further checks can occur at different moments in the same conversation, one at a time. Each check is bounded. The default NVIDIA/OpenRouter route makes one provider call. With ChatGPT primary enabled, recoverable account-route failures such as transport errors, invalid or truncated output, quota, or timeouts can trigger one direct provider fallback; authentication, security, refusal, and secret-like-output failures end the call.
 
 This is the intended workflow when the client and assistant follow the server and tool instructions. Connecting the server alone does not guarantee that the assistant will invoke it. You keep decisions and authorization; a returned proposal does not authorize action.
 
@@ -59,7 +59,7 @@ Either model can be wrong. Passing the server's checks does not prove a candidat
 
 ## ☁️ Run it in your own accounts
 
-The included cloud route uses a Worker in your own Cloudflare account, GitHub sign-in to control access, and accounts with model providers, the services through which the tools access their models. GitHub handles authentication here; NVIDIA and OpenRouter supply the configured model calls. You do not need a home server or GPU. Inference runs through cloud services, so this route is not local or offline.
+The included cloud route uses a Worker in your own Cloudflare account, GitHub sign-in to control access, and accounts with model providers, the services through which the tools access their models. GitHub handles authentication here; NVIDIA and OpenRouter supply five and three standard model calls respectively. The recommended personal setup adds your free ChatGPT account as primary for all eight tools, with one direct NVIDIA/OpenRouter fallback for recoverable failures. The template leaves this option off until you enable it. You do not need a home server or GPU. Inference runs through cloud services, so this route is not local or offline.
 
 Installing and connecting the server is a separate job from everyday conversation. Your assistant's app must support the server's remote MCP connection and its sign-in flow. The project is not tied to one assistant app; support depends on those capabilities, and no universal client compatibility is claimed. The app hosting your assistant and the provider handling an MCP model call are separate parts of the setup.
 
@@ -133,9 +133,10 @@ These are source-configured routes, not a live availability or quality guarantee
 | NVIDIA direct | `nvidia/nemotron-3-ultra-550b-a55b` | `stress_structure`, `adversarial_review`, `redteam_experiment` |
 | NVIDIA direct | `nvidia/nemotron-3-super-120b-a12b` | `sparring_pressure`, `sparring_scan` |
 | OpenRouter | `nvidia/nemotron-3-ultra-550b-a55b:free` | `premortem_trace`, `premortem_scan`, `abuse_path` |
+| Optional ChatGPT account route | Model reported by the upstream transport | All eight tools when enabled; direct NVIDIA/OpenRouter fallback for recoverable account-route failures |
 | Cloudflare Workers AI, `cloudflare_rollback` | `@cf/openai/gpt-oss-120b` | All tools except `sparring_scan` |
 
-NVIDIA and OpenRouter use provider-specific Chat Completions requests over HTTPS. Workers AI uses the native `env.AI.run()` binding. Select rollback explicitly with `COGNITIVE_RUNTIME_PROFILE=cloudflare_rollback`; it is not an automatic fallback and does not provide all eight tools.
+The ChatGPT route is opt-in and uses a signed-in account session; it is not an OpenAI API key route or an upstream public API guarantee. The reported model name comes from the transport and does not prove which physical model served a request. Recoverable account-route failures such as transport errors, invalid or truncated output, quota, or timeouts permit one direct attempt using the configured NVIDIA or OpenRouter route. Authentication failures (including HTTP 401 or 403), security findings, model refusals, and secret-like output end without fallback. There is no ChatGPT retry within the same MCP call. NVIDIA and OpenRouter use provider-specific Chat Completions requests over HTTPS. Workers AI uses the native `env.AI.run()` binding. Select rollback explicitly with `COGNITIVE_RUNTIME_PROFILE=cloudflare_rollback`; it is not an automatic fallback and does not provide all eight tools.
 
 Groq, Cohere, Mistral, and GitHub Models have opt-in canary tests only. They are not active runtime routes. Shared request or response shapes do not make providers interchangeable by changing an API key. [Adapter compatibility](docs/ADAPTER-COMPATIBILITY.md) and [model evidence](docs/MODEL-ADAPTER-EVIDENCE.md) document settings, historical observations, and their limits.
 
@@ -191,7 +192,8 @@ Live-provider canaries require deliberate opt-in and private provider credential
 
 | Reference | What to find |
 | --- | --- |
-| 🚀 [Getting started](docs/GETTING-STARTED.md) | Local checks, deployment, connection, and troubleshooting |
+| 🚀 [Getting started](docs/GETTING-STARTED.md) | Local checks, standard deployment, connection, and troubleshooting |
+| 💬 [Optional ChatGPT setup](docs/CHATGPT-SETUP.md) | Account sign-in, opt-in configuration, and route limits |
 | 🔌 [Adapter compatibility](docs/ADAPTER-COMPATIBILITY.md) | Runtime routes versus canary-only adapters |
 | 🧾 [Model and adapter evidence](docs/MODEL-ADAPTER-EVIDENCE.md) | Request settings and bounded evaluation records |
 | 🧰 [Server](src/server.ts) and [prompts](src/prompts/) | Tool schemas, assistant instructions, provider prompts |
@@ -214,3 +216,6 @@ AI assistance does not make the project automatically correct, complete, or suit
 ## 📄 License
 
 MIT. See [LICENSE](LICENSE).
+
+The ChatGPT account sign-in dependency is distributed under Apache-2.0; its
+license and attribution are preserved in [third-party notices](THIRD-PARTY-NOTICES.md).

@@ -2,6 +2,7 @@ AUTH_MODE=none
 PUBLIC_ORIGIN=http://localhost:8787
 MCP_RESOURCE=http://localhost:8787
 COGNITIVE_RUNTIME_PROFILE=external
+COGNITIVE_GPT_PRIMARY_ENABLED=false
 LOG_SINK_ENABLED=false
 LOG_SINK_URL=https://logs.example.invalid/ingest
 LOG_SINK_TOKEN=replace-with-local-log-sink-token

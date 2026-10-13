@@ -17,7 +17,7 @@ import { emitSparringTelemetry } from "./telemetry";
 
 const securitySchemes = [{ type: "oauth2", scopes: ["review:invoke"] }] as const;
 const annotations = { readOnlyHint: true, destructiveHint: false, openWorldHint: false } as const;
-export const RUNTIME_VERSION = "3.9.3";
+export const RUNTIME_VERSION = "3.10.0";
 export const SERVER_INSTRUCTIONS =
   "The calling model selects one matching tool, prepares one bounded self-contained packet, and makes one call. Use stress_structure when one relation is isolated and adversarial_review when structural discovery is requested without one isolated relation. Use sparring_pressure when the calling model has isolated the target and lens; use sparring_scan when only one early idea and its exact intended outcome are known. Use premortem_trace when one exact failure condition is supplied and premortem_scan when only the failed outcome is known. Treat each provider output as a candidate, not evidence or a decision. Triage each complete tool-defined unit as usable, usable_with_limits, or unusable; do not split it to salvage a component. Use usable units directly. For usable_with_limits, preserve the grounded unit, develop at most two grounded readings, and state its limit. For unusable, reject the unit; only if no usable or usable_with_limits unit remains, keep at most one non-assertive packet-grounded residual, otherwise one diagnostic. Never return both a preserved signal and a residual. Do not assert the missing condition, retain an invented actor, system, or capability, reconnect discarded steps, or repair a causal chain. Hypotheses are allowed where the selected tool defines them but are not evidence. Test data may be created only where allowed_actions permits it. Never add facts, propose fixes automatically, make a decision, call multiple tools, or retry automatically.";
 
@@ -880,6 +880,7 @@ export async function runAdversarialTool(
     const response = {
       isError: true,
       content: [{ type: "text" as const, text: JSON.stringify(publicError) }],
+      ...(result.providerMeta ? { _meta: { "op-adversarial/provider": result.providerMeta } } : {}),
     };
     await scheduleEvent(response);
     return response;
@@ -887,6 +888,7 @@ export async function runAdversarialTool(
   const response = {
     content: [{ type: "text" as const, text: result.text }],
     structuredContent: structuredToolOutput(tool, result.text),
+    ...(result.providerMeta ? { _meta: { "op-adversarial/provider": result.providerMeta } } : {}),
   };
   await scheduleEvent(response);
   return response;

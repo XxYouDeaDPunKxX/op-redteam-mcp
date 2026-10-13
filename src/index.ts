@@ -1,4 +1,5 @@
 import OAuthProvider from "@cloudflare/workers-oauth-provider";
+export { GptAccount } from "./providers/gpt-account";
 
 import { createDcrPolicy } from "./auth/dcr";
 import { createAuthorizationHandler } from "./auth/github";

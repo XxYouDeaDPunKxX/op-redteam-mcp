@@ -21,11 +21,22 @@ Three kinds of information are kept separate:
 | NVIDIA direct | `nvidia/nemotron-3-ultra-550b-a55b` | `stress_structure`, `redteam_experiment`, `adversarial_review` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
 | NVIDIA direct | `nvidia/nemotron-3-super-120b-a12b` | `sparring_pressure`, `sparring_scan` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
 | OpenRouter | `nvidia/nemotron-3-ultra-550b-a55b:free` | `abuse_path`, `premortem_trace`, `premortem_scan` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
+| ChatGPT account session | Identifier reported by the account transport | All eight tools when `COGNITIVE_GPT_PRIMARY_ENABLED=true`; recoverable account-route failure can trigger one direct configured NVIDIA/OpenRouter attempt | Opt-in runtime route; reported identifier does not guarantee a physical model | Account adapter source and tests; see bounded evidence below |
 | Cloudflare Workers AI rollback | `@cf/openai/gpt-oss-120b` | `cloudflare_rollback` profile; `sparring_scan` is not supported by this profile | Active rollback path | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts`, `test/integration.test.ts` |
 
 Local `AUTH_MODE=none` defaults to the rollback profile when no recognized
 `COGNITIVE_RUNTIME_PROFILE` is supplied. The local example file explicitly
 selects `external` for the NVIDIA/OpenRouter routes.
+
+The ChatGPT account route is disabled by default and is selected explicitly
+with `COGNITIVE_GPT_PRIMARY_ENABLED=true`. It uses the same tool-specific
+prompts and validators. A tool call makes at most one account-route attempt.
+Recoverable account-route failures, such as transport errors, invalid or
+truncated output, quota, or timeout, can trigger one direct NVIDIA/OpenRouter
+attempt. Authentication failures (including HTTP 401
+or 403), security findings, model refusals, and secret-like output end without
+fallback. There is no account-route retry within that MCP call. See the
+[ChatGPT setup guide](CHATGPT-SETUP.md).
 
 ## Active runtime settings
 
@@ -69,6 +80,35 @@ The output ceiling is `8192` for `redteam_experiment`,
 `adversarial_review`, and `premortem_scan`; it is `4096` for the other
 rollback requests. The runtime does not execute `sparring_scan` in this
 profile and returns a provider-configuration failure for it.
+
+### ChatGPT account session
+
+This optional route uses a signed-in account session through an
+account-authenticated transport. It is not an OpenAI API key endpoint or a
+public API availability guarantee. The model identifier comes from the
+transport and does not establish the physical model that handled a request.
+The server validates the response with each tool's existing validator. A
+recoverable account-route failure, such as a transport error, invalid or
+truncated output, quota, or timeout, can be followed by one direct call on the
+tool's configured NVIDIA or OpenRouter route.
+Authentication failures (including HTTP 401 or 403), security findings, model
+refusals, and secret-like output fail closed without fallback.
+
+Historical bounded evidence: a Free-account sign-in completed, credentials
+were renewed, and one tool call completed in a prior private evaluation. That
+observation is not a reproducible public test artifact or a current deployment
+certification. It does not establish general quality, reliability, quota,
+pricing, or terms compatibility. Plus and Pro accounts were not verified live.
+
+On 2026-10-13, a private Cloudflare preview importing this public source
+completed one `stress_structure` call with a Free account. Its response passed
+the existing output validator: one ChatGPT conversation request and zero native
+fallback requests. The preview used an already configured credential owner;
+this does not verify a fresh deployment's initial login. The private proof is
+not included in this repository. Automated tests
+exercise all eight routes, direct fallback, encrypted credential storage, and
+renewal using synthetic fixtures. These are bounded checks, not a quality or
+availability certification.
 
 ## Canary configurations
 

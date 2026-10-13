@@ -1,6 +1,6 @@
 {
   "name": "op-redteam-mcp",
-  "version": "3.9.3",
+  "version": "3.10.0",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -20,11 +20,15 @@
     "test": "vitest run",
     "test:tools": "vitest run test/sparring.test.ts",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "chatgpt:login": "node scripts/chatgpt-account.mjs login",
+    "chatgpt:status": "node scripts/chatgpt-account.mjs status",
+    "chatgpt:renew": "node scripts/chatgpt-account.mjs renew"
   },
   "dependencies": {
     "@cloudflare/workers-oauth-provider": "0.8.0",
     "@modelcontextprotocol/sdk": "1.32.1",
+    "@openai-oauth/core": "2.0.0",
     "agents": "0.17.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",

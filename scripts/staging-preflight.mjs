@@ -49,6 +49,9 @@ check(!config.routes || config.routes.length === 0, "staging must not expose a c
 check(config.vars?.AUTH_MODE === "github", "AUTH_MODE must be github");
 failures.push(...validateStagingTemplateValues(config));
 check(config.vars?.COGNITIVE_RUNTIME_PROFILE === "external", "COGNITIVE_RUNTIME_PROFILE must select the external production route");
+check(["false", "true"].includes(config.vars?.COGNITIVE_GPT_PRIMARY_ENABLED), "ChatGPT primary must be an explicit true/false choice");
+check(exactlyOne(config.durable_objects?.bindings, binding => binding.name === "GPT_ACCOUNT" && binding.class_name === "GptAccount" && !binding.script_name), "GPT_ACCOUNT must refer to this Worker's credential-only GptAccount");
+check(exactlyOne(config.migrations, migration => migration.tag === "chatgpt-account-v1" && sameStrings(migration.new_sqlite_classes, ["GptAccount"])), "ChatGPT credential namespace needs its SQLite migration");
 check(config.vars?.LOG_SINK_ENABLED === "false", "LOG_SINK_ENABLED must remain disabled in the committed staging template");
 check(typeof config.vars?.LOG_SINK_URL === "string" && config.vars.LOG_SINK_URL.startsWith("https://"), "LOG_SINK_URL must be an HTTPS endpoint");
 for (const name of SECRET_NAMES) {

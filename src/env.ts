@@ -20,6 +20,8 @@ export interface Env extends LogSinkConfig {
   COOKIE_ENCRYPTION_KEY: string;
   IDENTITY_HMAC_KEY: string;
   COGNITIVE_RUNTIME_PROFILE?: "external" | "cloudflare_rollback";
+  COGNITIVE_GPT_PRIMARY_ENABLED?: string;
+  GPT_ACCOUNT?: DurableObjectNamespace;
   OPENROUTER_API_KEY?: string;
   NVIDIA_API_KEY?: string;
 }

@@ -17,7 +17,12 @@
   ],
   "workers_dev": true,
   "preview_urls": false,
+  "durable_objects": {
+    "bindings": [{ "name": "GPT_ACCOUNT", "class_name": "GptAccount" }]
+  },
+  "migrations": [{ "tag": "chatgpt-account-v1", "new_sqlite_classes": ["GptAccount"] }],
   "vars": {
+    "COGNITIVE_GPT_PRIMARY_ENABLED": "false",
     "LOG_SINK_ENABLED": "false",
     "LOG_SINK_URL": "https://logs.example.invalid/ingest"
   },
@@ -54,6 +59,9 @@
   },
   "env": {
     "staging": {
+      "durable_objects": {
+        "bindings": [{ "name": "GPT_ACCOUNT", "class_name": "GptAccount" }]
+      },
       "workers_dev": true,
       "preview_urls": false,
       "define": {
@@ -64,6 +72,7 @@
         "PUBLIC_ORIGIN": "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev",
         "MCP_RESOURCE": "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev",
         "COGNITIVE_RUNTIME_PROFILE": "external",
+        "COGNITIVE_GPT_PRIMARY_ENABLED": "false",
         "ALLOWED_GITHUB_USER_IDS": "",
         "ALLOWED_DCR_REDIRECT_URIS": "",
         "LOG_SINK_ENABLED": "false",

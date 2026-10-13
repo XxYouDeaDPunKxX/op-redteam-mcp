@@ -17,6 +17,9 @@ Choose how far you want to go:
   external provider and needs an API key.
 - [Deploy and connect a client](#4-prepare-a-remote-deployment). This needs
   Cloudflare, GitHub, both provider keys, and a compatible MCP client.
+- [Use an optional ChatGPT account route](CHATGPT-SETUP.md). This uses your
+  signed-in account and needs a separate setup; it is not required for the
+  standard NVIDIA/OpenRouter route.
 
 Use non-sensitive sample text for your first call. Read-only tools still send
 their input to NVIDIA or OpenRouter, and usage may incur charges or consume
@@ -167,12 +170,18 @@ fixed expected model answer. HTTP 200 alone is not enough: check for a top-level
 
 Treat the review as a candidate to check against the supplied text. Discard
 claims that rely on invented context. The service does not decide whether
-your idea is safe or correct, and it does not retry automatically.
+your idea is safe or correct, and the default external route does not retry
+automatically. The optional ChatGPT primary route has a bounded direct fallback;
+see the [ChatGPT setup guide](CHATGPT-SETUP.md) for when it applies.
 
 To use `premortem_trace`, `premortem_scan`, or `abuse_path`, also add
 `OPENROUTER_API_KEY` to `.dev.vars` and restart the server. Get that key through
 [OpenRouter](https://openrouter.ai/docs/quickstart). The other five tools use
 NVIDIA in the external profile.
+
+For the optional account-based ChatGPT route, follow the separate
+[ChatGPT setup guide](CHATGPT-SETUP.md). The default external profile continues
+to use NVIDIA and OpenRouter.
 
 ## 4. Prepare a remote deployment
 

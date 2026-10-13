@@ -310,7 +310,7 @@ describe("stateless MCP Worker integration", () => {
     const initializedPayload = (await initialized.json()) as { result: { instructions: string; serverInfo: Record<string, unknown> } };
     expect(initializedPayload).toMatchObject({
       result: {
-        serverInfo: { name: "OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges", version: "3.9.3" },
+        serverInfo: { name: "OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges", version: "3.10.0" },
         instructions: expect.any(String),
       },
     });
