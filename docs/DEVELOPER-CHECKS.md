@@ -119,7 +119,8 @@ Wait for the HTTP status and JSON response; Node may show `Promise { <pending> }
 first. Then type `.exit` to leave the prompt. A successful call returns text in
 `result.content` and a review in `result.structuredContent.review`. There is no
 fixed expected model answer. HTTP 200 alone is not enough: check for a top-level
-`error` or `result.isError: true`, then use the troubleshooting section below.
+`error` or `result.isError: true`, then use
+[troubleshooting in Getting started](GETTING-STARTED.md).
 
 This check exercises transport and output validation. In normal use, the
 calling assistant evaluates the candidate against the supplied material. The service does not decide whether

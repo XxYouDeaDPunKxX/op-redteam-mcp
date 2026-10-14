@@ -139,7 +139,7 @@ These are source-configured routes, not a live availability or quality guarantee
 | NVIDIA direct | `nvidia/nemotron-3-ultra-550b-a55b` | `stress_structure`, `adversarial_review`, `redteam_experiment` |
 | NVIDIA direct | `nvidia/nemotron-3-super-120b-a12b` | `sparring_pressure`, `sparring_scan` |
 | OpenRouter | `nvidia/nemotron-3-ultra-550b-a55b:free` | `premortem_trace`, `premortem_scan`, `abuse_path` |
-| Optional ChatGPT account route | Model reported by the upstream transport | All eight tools when enabled; direct NVIDIA/OpenRouter fallback for recoverable account-route failures |
+| Optional ChatGPT account route, `external` profile | Model reported by the upstream transport | All eight tools when enabled; direct NVIDIA/OpenRouter fallback for recoverable account-route failures |
 | Cloudflare Workers AI, `cloudflare_rollback` | `@cf/openai/gpt-oss-120b` | All tools except `sparring_scan` |
 
 The ChatGPT route is opt-in and uses a signed-in account session; it is not an OpenAI API key route or an upstream public API guarantee. The reported model name comes from the transport and does not prove which physical model served a request. Recoverable account-route failures such as transport errors, invalid or truncated output, quota, or timeouts permit one direct attempt using the configured NVIDIA or OpenRouter route. Authentication failures (including HTTP 401 or 403), security findings, model refusals, and secret-like output end without fallback. There is no ChatGPT retry within the same MCP call. NVIDIA and OpenRouter use provider-specific Chat Completions requests over HTTPS. Workers AI uses the native `env.AI.run()` binding. Select rollback explicitly with `COGNITIVE_RUNTIME_PROFILE=cloudflare_rollback`; it is not an automatic fallback and does not provide all eight tools.
@@ -147,6 +147,34 @@ The ChatGPT route is opt-in and uses a signed-in account session; it is not an O
 Groq, Cohere, Mistral, and GitHub Models have opt-in canary tests only. They are not active runtime routes. Shared request or response shapes do not make providers interchangeable by changing an API key. [Adapter compatibility](docs/ADAPTER-COMPATIBILITY.md) and [model evidence](docs/MODEL-ADAPTER-EVIDENCE.md) document settings, historical observations, and their limits.
 
 The native routes have a 150-second provider deadline. With ChatGPT primary enabled, credential retrieval or renewal and the ChatGPT request share a 45-second cutoff; any permitted native fallback must finish within the shared 150-second provider budget. The configured Worker limit is six calls per 60 seconds per derived identity. Inputs and outputs undergo bounded validation and secret screening; these checks do not establish semantic correctness. Exact schemas come from `tools/list` and [src/server.ts](src/server.ts).
+
+### ChatGPT account setup and renewal
+
+In your unpublished deployment copy, set `COGNITIVE_GPT_PRIMARY_ENABLED=true` alongside `COGNITIVE_RUNTIME_PROFILE=external` in `env.staging.vars`. The template defaults to `false`. Keep NVIDIA and OpenRouter credentials configured for direct fallback. This selects the provider behind the tools; your calling assistant connects through the same remote MCP authentication flow.
+
+The template includes the `GPT_ACCOUNT` Durable Object binding, class `GptAccount`, and SQLite migration `chatgpt-account-v1`. Deploy these before account setup. The object stores account credentials and pending PKCE login state encrypted with AES-256-GCM using a key derived from `COOKIE_ENCRYPTION_KEY`. It stores no tool inputs or responses. Keep the standard deployment secrets configured.
+
+From that deployment copy, authenticate Wrangler if needed, then sign in to the ChatGPT account that will supply model responses:
+
+```sh
+npx wrangler login
+npm run chatgpt:login -- --env staging
+```
+
+The helper opens browser sign-in and receives its callback on `localhost:1455`. It forwards the authorization code and state through a temporary gated Worker preview; `GptAccount` verifies the state and exchanges the code using PKCE inside Cloudflare. The helper prints metadata rather than token values. It closes local listeners, stops its Wrangler process, and removes generated local files when finished. The preview gate expires after 15 minutes; the deployed MCP Worker has no public account-administration routes.
+
+Check session status, or explicitly request a renewal without another browser login while the saved refresh credentials remain valid:
+
+```sh
+npm run chatgpt:status -- --env staging
+npm run chatgpt:renew -- --env staging
+```
+
+During a model call, the object automatically renews the access token when it is within 60 seconds of expiry. Concurrent token requests share the pending operation, and the object saves renewed credentials encrypted. The OAuth request has a 20-second deadline within the primary route's 45-second budget. Revoked or rejected credentials require another sign-in.
+
+Each ChatGPT model request starts a fresh conversation in the backend account. The Worker does not fetch previous conversations or change account memory and personalization settings; configure those in ChatGPT. The service selects the model automatically. The account transport uses endpoints whose protocol and availability can change.
+
+The MCP response's `_meta["op-adversarial/provider"]` records the selected provider, observed conversation and native request counts, and available failure or renewal metadata. An accepted ChatGPT response also includes the reported model identifier. These fields describe routing; output validation and the calling assistant's triage still determine whether a result is usable. Follow the [full account setup guide](docs/CHATGPT-SETUP.md) for the procedure and limits.
 
 ## Cost conditions
 
@@ -206,6 +234,7 @@ Live-provider canaries require deliberate opt-in and private provider credential
 | [Server](src/server.ts) and [prompts](src/prompts/) | Tool schemas, assistant instructions, provider prompts |
 | [Worker entry point](src/index.ts) | Routing and authentication |
 | [Requests](src/sparring/request.ts), [adapter](src/sparring/adapter.ts), and [service](src/sparring/service.ts) | Model requests, routing, and output checks |
+| [Account storage](src/providers/gpt-account.ts), [ChatGPT routing](src/providers/gpt-primary.ts), [transport](src/providers/gpt-transport.ts), and [setup helper](scripts/chatgpt-account.mjs) | Encrypted credentials, renewal, account requests, and direct fallback |
 | [Tests](test/) | Runtime, authentication, boundary, and optional canary checks |
 | [Log sink](src/log-sink.ts) and [telemetry](src/telemetry.ts) | External event delivery and operational metrics |
 | [Security policy](SECURITY.md) | Private vulnerability reporting |

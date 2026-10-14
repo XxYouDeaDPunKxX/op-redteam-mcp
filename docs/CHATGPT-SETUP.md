@@ -46,9 +46,9 @@ configuration templates default to disabled until you choose the route. Keep
 `COGNITIVE_RUNTIME_PROFILE` set to `external` and retain both provider keys so
 the direct fallback is available.
 
-The staging Durable Object binding must use class `GptAccount`, and its SQLite
-migration must include tag `chatgpt-account-v1`. The project deployment
-template includes these declarations. Keep the standard `COOKIE_ENCRYPTION_KEY`
+The staging Durable Object binding must be named `GPT_ACCOUNT` and use class
+`GptAccount`. Its SQLite migration must include tag `chatgpt-account-v1`.
+The project deployment template includes these declarations. Keep the standard `COOKIE_ENCRYPTION_KEY`
 and `IDENTITY_HMAC_KEY` secrets configured as described in the deployment
 guide. The account session and pending PKCE state are encrypted in the bound
 Cloudflare Durable Object; tool inputs are not stored there.
