@@ -52,6 +52,8 @@ client that supports this server's authentication flow.
 Before creating cloud resources, check your client's documentation for:
 
 - Streamable HTTP transport for remote MCP servers.
+- OAuth protected-resource and authorization-server metadata discovery, so
+  the client can find the sign-in and registration endpoints.
 - OAuth authorization-code sign-in with PKCE S256, a login-flow protection.
 - Dynamic client registration (DCR) as a public client, with
   `token_endpoint_auth_method=none`.
@@ -62,8 +64,12 @@ Before creating cloud resources, check your client's documentation for:
   is the address the browser returns to after authorization.
 
 The server accepts one callback URL per client registration, matched against
-its allowlist, and exposes the scope `review:invoke`. If the client offers only
-a local command/stdio connection, static API-key authentication, or a different
+its allowlist, and exposes the scope `review:invoke`. Registration must use
+`token_endpoint_auth_method=none`. If supplied, `response_types` must contain
+only `code`, and `grant_types` must contain `authorization_code`, optionally
+with `refresh_token`. Registration's optional `scope` must be `review:invoke`.
+If the client offers only a local command/stdio connection, static API-key
+authentication, or a different
 registration flow, this guide does not establish compatibility. See the
 [MCP authorization specification](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization)
 for the protocol terminology.

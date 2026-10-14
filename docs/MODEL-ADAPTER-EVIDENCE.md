@@ -122,6 +122,11 @@ checkout, because the result can contain raw provider material.
 | Mistral | `magistral-small-latest` | `premortem_trace` | `test/mistral-github-fast-canary.test.ts` |
 | GitHub Models | `microsoft/phi-4-reasoning`, `deepseek/deepseek-r1-0528` | `stress_structure`, `adversarial_review` | `test/mistral-github-fast-canary.test.ts` |
 
+The Groq canary covers seven tools; it does not include `sparring_scan`.
+`SKIP_MISTRAL_CANARY=1` reduces the combined Mistral/GitHub probe from three
+calls to the two GitHub calls. The corresponding opt-in flag and output
+directory are still required.
+
 The settings below describe the current canary definitions. The dated summaries
 under each provider describe historical runs, not a fresh execution of those
 definitions.

@@ -53,7 +53,7 @@ This is an illustration, not a recorded run. A task need not use several tools.
 
 ## What a check can establish
 
-The model behind the tool proposes; the calling assistant checks whether the supplied material or available evidence supports the result and whether it is relevant and useful. A useful result may still need a stated limit. The assistant must not invent missing context or patch together discarded reasoning to rescue a result.
+The model behind the tool proposes; the calling assistant checks whether the supplied material or available evidence supports the result and whether it is relevant and useful. It evaluates each complete unit defined by the tool, without splitting it to salvage a component. A useful result may still need a stated limit. The assistant must not invent missing context or patch together discarded reasoning to rescue a result.
 
 The model behind the tool works from the context supplied for that call. It does not search for missing facts. Hypotheses can help expose a dependency or suggest a test, but they are not evidence that an event occurred.
 
@@ -109,7 +109,7 @@ Keep it on loopback; do not expose this mode through a tunnel or public interfac
 
 Use [the deployment guide](docs/GETTING-STARTED.md) in a separate unpublished deployment copy. It covers Cloudflare resources, GitHub OAuth, secrets, and the publishing command. The checked-in [wrangler.jsonc](wrangler.jsonc) is a template.
 
-The client must support Streamable HTTP, OAuth authorization code with PKCE S256, resource indicators, and dynamic registration as a public client with `token_endpoint_auth_method=none`. The scope is `review:invoke`. Registration accepts one exact allowlisted callback per client.
+The client must support Streamable HTTP, OAuth protected-resource and authorization-server metadata discovery, authorization code with PKCE S256, resource indicators, and dynamic registration as a public client with `token_endpoint_auth_method=none`. The scope is `review:invoke`. Registration accepts one exact allowlisted callback per client; see the [client compatibility checklist](docs/GETTING-STARTED.md) for the accepted registration metadata.
 
 | Setting | Required value |
 | --- | --- |
@@ -178,10 +178,11 @@ The MCP response's `_meta["op-adversarial/provider"]` records the selected provi
 
 ## Cost conditions
 
-Pricing snapshot checked 2026-10-07. Free allocations can support evaluation, but this exact deployment has not been certified to fit every free-plan limit.
+Pricing snapshot checked 2026-10-14. Free allocations can support evaluation, but this exact deployment has not been certified to fit every free-plan limit.
 
 - ☁️ [Workers Free](https://developers.cloudflare.com/workers/platform/pricing/) includes 100,000 requests/day and 10 ms CPU per invocation. Low request volume alone does not establish CPU compatibility. Workers Paid has a $5/month minimum.
 - 🗄️ [Workers KV](https://developers.cloudflare.com/kv/platform/pricing/) has separate free operation/storage limits. [Analytics Engine](https://developers.cloudflare.com/analytics/analytics-engine/pricing/) lists allocations and currently says usage is not yet billed; check current conditions for both.
+- The ChatGPT account route also uses a [SQLite-backed Durable Object](https://developers.cloudflare.com/durable-objects/platform/pricing/), available on Workers Free with separate request, duration, and storage limits. On Free, operations fail when their quota is exceeded; on Paid, usage above included allocations can incur charges.
 - 🧠 [NVIDIA's hosted free access](https://docs.api.nvidia.com/nim/docs/product) is offered for prototyping. Its [API trial terms](https://assets.ngc.nvidia.com/products/api-catalog/legal/NVIDIA%20API%20Trial%20Terms%20of%20Service.pdf) restrict production use of trial services and generated content. Check the terms applicable to your use.
 - 🔀 [OpenRouter Free](https://openrouter.ai/pricing/) lists 50 requests/day. The configured `:free` model route remains subject to availability and provider limits.
 
