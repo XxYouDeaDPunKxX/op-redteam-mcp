@@ -17,14 +17,15 @@ Choose how far you want to go:
   external provider and needs an API key.
 - [Deploy and connect a client](#4-prepare-a-remote-deployment). This needs
   Cloudflare, GitHub, both provider keys, and a compatible MCP client.
-- [Use an optional ChatGPT account route](CHATGPT-SETUP.md). This uses your
-  signed-in account and needs a separate setup; it is not required for the
-  standard NVIDIA/OpenRouter route.
+- [Configure ChatGPT as an optional model provider](CHATGPT-SETUP.md). This
+  authorizes a backend account separately from your MCP host's connection.
+  The NVIDIA/OpenRouter-only configuration is also available.
 
 Use non-sensitive sample text for your first call. Read-only tools still send
-their input to NVIDIA or OpenRouter, and usage may incur charges or consume
-provider quotas. Keep credentials out of tool inputs. The secret detector is
-not a guarantee that all sensitive text will be caught.
+their input to the configured model provider. An enabled fallback may send the
+same input to a second provider. Usage may incur charges or consume provider
+quotas. Keep credentials out of tool inputs. The secret detector is not a
+guarantee that all sensitive text will be caught.
 
 ## 1. Install and check the project
 
@@ -381,6 +382,10 @@ fields; the JSON-RPC envelope is handled by the client.
 Client screens and settings vary. A client that cannot complete registration
 or send the `review:invoke` scope needs a compatibility check; do not disable
 authentication or broaden the callback allowlist to make sign-in succeed.
+
+For optional guidance on when your assistant should use a check, add the
+[calling-assistant instructions](ASSISTANT-INSTRUCTIONS.md) through your host's
+instruction settings. These apply to either model-provider configuration.
 
 ## Optional log sink
 

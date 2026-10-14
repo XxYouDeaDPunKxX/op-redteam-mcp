@@ -1,22 +1,14 @@
-# Optional ChatGPT account route
+# Optional ChatGPT model provider
 
-This guide adds an optional account-based route for the model calls made by
-OP Adversarial Pressure MCP. The regular setup uses NVIDIA for five tools and
-OpenRouter for three. For a personal DIY setup, the recommended choice is a
-Free ChatGPT account as primary, with the existing direct NVIDIA/OpenRouter
-routes as fallback. ChatGPT can be selected as primary for all eight tools.
-Recoverable account-route failures, such as transport errors, invalid or
-truncated output, quota, or timeout, can trigger one direct fallback attempt.
+This guide configures ChatGPT as the model provider behind all eight tools in
+OP Adversarial Pressure MCP. Your calling assistant can run in any host that
+supports the server's remote MCP transport and authentication flow. Choosing
+ChatGPT as the provider is separate from choosing that host.
 
-This route is intended for personal evaluation. It uses a signed-in ChatGPT
-account session, not an OpenAI API key or a public, supported API endpoint.
-The upstream service reports the model identifier; that value does not prove
-which physical model handled a request. A successful attempt may still be
-rejected by the tool's normal output checks.
-
-The OAuth dependency supplies sign-in and token renewal only. Model requests
-use ChatGPT's conversation service; this Worker does not send inference
-requests to Codex. Account quota accounting has not been independently measured.
+The Worker uses a signed-in account and requests automatic model selection
+from ChatGPT's conversation service. A recognized recoverable failure can
+trigger one direct attempt on the tool's configured NVIDIA or OpenRouter
+route. Both attempts stay inside the same MCP tool call.
 
 ## Before you start
 
@@ -25,25 +17,19 @@ first. You need the deployed Worker, its Durable Object migration, and the
 normal NVIDIA and OpenRouter fallback credentials. This account route runs in
 your Cloudflare Worker; it does not run the model on your computer.
 
-Use a free ChatGPT account for personal evaluation. A separate account is
-recommended because every request to the ChatGPT model route opens a new
-conversation, which can clutter the account's conversation list. This is
-setup advice only; the project does not require or enforce a second account.
-Plus or Pro accounts use the same login flow, but live testing covered a Free
-account only. No plan-specific availability, cost, or quota guarantee is made.
+The recommended personal provider configuration uses a ChatGPT Free account
+with NVIDIA/OpenRouter fallback. A separate account keeps the new conversation
+created by each model request out of your main account's chat list. This is
+account advice; the Worker does not require a separate account or restrict
+login to the Free plan. Plus and Pro use the same login path. Upstream access
+and limits depend on the account and service.
 Check [OpenAI's applicable service terms](https://openai.com/policies/terms-of-use/)
 and account limits before use.
 
-There are two separate sign-ins. The backend account used for model reviews is
-authorized by the commands below. The MCP client is the assistant app that
-connects to your Worker. If you want ChatGPT to be that client, custom MCP apps
-must be available under your ChatGPT plan and workspace settings. Follow
-OpenAI's current
-[developer mode and MCP apps guide](https://help.openai.com/en/articles/12584461-developer-mode-and-full-mcp-connectors-in-chatgpt)
-and configure the server as a remote MCP app using your Worker URL ending in
-`/mcp`. Complete the MCP OAuth sign-in when ChatGPT asks. Availability and
-menus vary by plan and workspace. You can also use another compatible MCP
-client as the caller.
+The commands below authorize the backend account used for model reviews.
+Your MCP host connects to the Worker separately, using GitHub sign-in and the
+`review:invoke` scope. Follow [Connect your MCP client](GETTING-STARTED.md#5-connect-your-mcp-client)
+for that connection, regardless of the selected model provider.
 
 ## Enable the route
 
@@ -69,10 +55,10 @@ Cloudflare Durable Object; model request packets are not stored there.
 
 Deploy the updated Worker and migration using the regular deployment steps.
 This creates or updates a real Cloudflare resource and may have service costs.
-The login helper and its private preview are temporary: they exist only while
-the command runs, then the helper and its temporary files are removed. Your
-computer is not a permanent gateway, and the Worker has no permanent account
-administration route.
+The helper starts a temporary gated Worker preview for setup. When the command
+ends, it closes local listeners, stops Wrangler, and removes the generated
+local preview files. The preview gate expires after 15 minutes. The deployed
+MCP Worker exposes no permanent account-administration route.
 
 ## Sign in and check the account
 
@@ -95,6 +81,9 @@ using the saved PKCE verifier, then stores the credentials encrypted. Tokens
 are not written as plaintext files or printed in command output. The temporary
 preview and listener close when the command completes.
 
+The OAuth dependency handles sign-in and token renewal. Model requests use
+ChatGPT's conversation service.
+
 The callback listener needs local port `1455`. If sign-in cannot start because
 that port is already in use, close the application using it and run the login
 command again.
@@ -112,9 +101,8 @@ Cloudflare authentication already configured in Wrangler.
 ## Renewing access
 
 The Worker renews credentials during a model request when the access token is
-within 60 seconds of expiry. Renewal has a 20-second OAuth deadline. You do
-not need a weekly manual login schedule. To request renewal manually, for
-example after an account recovery, run:
+within 60 seconds of expiry. Renewal has a 20-second OAuth deadline. To request
+renewal manually while the saved refresh credentials remain valid, run:
 
 ```sh
 npm run chatgpt:renew -- --env staging
@@ -139,42 +127,25 @@ secret-like output end the call without fallback. If the permitted attempts
 fail, the tool returns its bounded failure response. All tools keep the same
 input schemas, prompts, and validators.
 
-The primary setting only affects the server's model route. It does not cause
-your calling assistant to invoke other MCP tools. The calling assistant should
-choose at most one appropriate check at a consequential decision, major pivot,
-or fragile assumption that could affect the outcome. It should read the tool
-description, send one complete packet that satisfies the tool's rules, then
-triage the complete response as `usable`, `usable_with_limits`, or `unusable`.
-It should use supported points with their limits, discard unsupported points,
-briefly say what it used or discarded, and not automatically retry or call
-another tool to fill gaps. A returned challenge is a candidate, not a decision
-for the user or a guarantee.
+Credential retrieval or renewal and the ChatGPT request share a 45-second
+primary deadline. Any permitted native fallback must finish within the shared
+150-second provider budget. The service selects the model automatically;
+the reported model identifier is metadata from that service. Each tool's
+normal output checks still apply.
 
-## Add these calling-assistant instructions
+## Calling-assistant instructions
 
-In ChatGPT on web or desktop, paste the block under **Settings →
-Personalization → Custom Instructions**. On iOS or Android, use **Settings →
-Customize ChatGPT**. Personal instructions apply across chats; the block names
-OP Adversarial Pressure MCP and asks ChatGPT to apply its guidance only when
-you use that connection. If you prefer to scope it to one place, paste it into a dedicated project's
-**Project settings**. Start a chat in that project and select this MCP app
-from the tools menu when it is available. See OpenAI's
-[Custom Instructions guide](https://help.openai.com/en/articles/8096356-chat-preference-for-chatgpt)
-and [Projects guide](https://help.openai.com/en/articles/10169521-projects-in-chatgpt).
-
-```text
-For OP Adversarial Pressure MCP only: When a task reaches a consequential decision, major pivot, or fragile assumption that could affect its outcome, consider whether one bounded adversarial check would help. If useful, read OP's tool descriptions and select one appropriate tool. Send one self-contained packet that meets that tool's rules and make one call. Treat the complete tool-defined response as one candidate unit; triage it as usable, usable_with_limits, or unusable. Integrate supported points with their limits; discard unsupported points. Briefly report what you used or discarded. Do not invent facts, split or repair a rejected unit, automatically retry, or cascade to another tool. A check is optional, not required for every answer. Leave decisions to the user.
-```
-
-These instructions guide the calling assistant. They do not guarantee that a
-client will choose to invoke the server.
+Use the [optional calling-assistant instructions](ASSISTANT-INSTRUCTIONS.md)
+through your MCP host's instruction settings. They apply independently of the
+model provider configured in the Worker. The server and selected tool define
+the complete handling rules.
 
 ## Privacy and known limits
 
 Each request to the ChatGPT account route opens a fresh conversation in the
-account used for the model route. The project does not read or manage
-conversation history, saved memories, or other account settings. Any memory
-settings remain under your control in ChatGPT.
+account used for the model route. The Worker does not fetch prior conversations
+or change account memory settings. Memory and personalization settings remain
+under your control in ChatGPT.
 
 Use only information you are allowed to send to the account provider. The
 request context is sent to the selected model service. Do not put passwords,
@@ -182,10 +153,8 @@ API keys, OAuth codes, or private account details in a tool input. Session
 tokens are stored encrypted in your Cloudflare Durable Object. The setup
 commands report metadata and do not reveal token values.
 
-The account transport is not a public OpenAI API with a compatibility or
-availability guarantee. Provider behavior, account limits, and model routing
-can change. Historical Free-account evaluation and a dated preview check of
-the public source are described in the evidence guide. They do not certify a
-fresh deployment, quality, reliability, or service terms. Plus and Pro account behavior was not
-verified live. See [model and adapter evidence](MODEL-ADAPTER-EVIDENCE.md) for
-the project evidence and its limits.
+The account transport uses account-authenticated ChatGPT endpoints rather
+than a supported public API. Their protocol, account limits, and model routing
+can change. See [model and adapter evidence](MODEL-ADAPTER-EVIDENCE.md) for the
+public source and synthetic-test coverage. That coverage does not establish
+live account availability, model quality, or quota accounting.

@@ -10,7 +10,7 @@ unless explicitly enabled.
 | --- | --- | --- | --- |
 | NVIDIA | OpenAI-style Chat Completions over HTTPS | `stress_structure`, `adversarial_review`, `sparring_pressure`, `sparring_scan`, `redteam_experiment` | `src/sparring/adapter.ts`, `src/sparring/request.ts` |
 | OpenRouter | OpenAI-style Chat Completions over HTTPS | `premortem_trace`, `premortem_scan`, `abuse_path` | `src/sparring/adapter.ts`, `src/sparring/request.ts` |
-| ChatGPT account session (opt-in) | Account-authenticated transport; reported model identifier is transport metadata | All eight tools when enabled; recoverable account-route failure can trigger one direct NVIDIA/OpenRouter attempt | ChatGPT setup guide and account adapter source |
+| ChatGPT account session (opt-in) | Account-authenticated transport; reported model identifier is transport metadata | All eight tools in the `external` profile when enabled; recoverable account-route failure can trigger one direct NVIDIA/OpenRouter attempt | `src/providers/gpt-primary.ts`, `src/providers/gpt-transport.ts` |
 | Cloudflare Workers AI | Native `env.AI.run()` binding; not an OpenAI HTTP adapter | `cloudflare_rollback` profile; `sparring_scan` is unsupported | `src/sparring/adapter.ts` |
 
 The NVIDIA and OpenRouter adapters use different endpoints, model routes and

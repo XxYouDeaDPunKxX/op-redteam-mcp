@@ -21,7 +21,7 @@ Three kinds of information are kept separate:
 | NVIDIA direct | `nvidia/nemotron-3-ultra-550b-a55b` | `stress_structure`, `redteam_experiment`, `adversarial_review` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
 | NVIDIA direct | `nvidia/nemotron-3-super-120b-a12b` | `sparring_pressure`, `sparring_scan` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
 | OpenRouter | `nvidia/nemotron-3-ultra-550b-a55b:free` | `abuse_path`, `premortem_trace`, `premortem_scan` | Active runtime | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts` |
-| ChatGPT account session | Identifier reported by the account transport | All eight tools when `COGNITIVE_GPT_PRIMARY_ENABLED=true`; recoverable account-route failure can trigger one direct configured NVIDIA/OpenRouter attempt | Opt-in runtime route; reported identifier does not guarantee a physical model | Account adapter source and tests; see bounded evidence below |
+| ChatGPT account session | Identifier reported by the account transport | All eight tools in the `external` profile when `COGNITIVE_GPT_PRIMARY_ENABLED=true`; recoverable account-route failure can trigger one direct configured NVIDIA/OpenRouter attempt | Opt-in model provider | `src/providers/gpt-primary.ts`, `src/providers/gpt-transport.ts`, `test/gpt-primary.test.ts` |
 | Cloudflare Workers AI rollback | `@cf/openai/gpt-oss-120b` | `cloudflare_rollback` profile; `sparring_scan` is not supported by this profile | Active rollback path | `src/sparring/request.ts`, `src/sparring/adapter.ts`, `test/sparring.test.ts`, `test/integration.test.ts` |
 
 Local `AUTH_MODE=none` defaults to the rollback profile when no recognized
@@ -94,21 +94,18 @@ tool's configured NVIDIA or OpenRouter route.
 Authentication failures (including HTTP 401 or 403), security findings, model
 refusals, and secret-like output fail closed without fallback.
 
-Historical bounded evidence: a Free-account sign-in completed, credentials
-were renewed, and one tool call completed in a prior private evaluation. That
-observation is not a reproducible public test artifact or a current deployment
-certification. It does not establish general quality, reliability, quota,
-pricing, or terms compatibility. Plus and Pro accounts were not verified live.
+The primary attempt, including credential retrieval or renewal, has a
+45-second cutoff. Any permitted native fallback shares the total 150-second
+provider budget. The account route requests automatic model selection.
 
-On 2026-10-13, a private Cloudflare preview importing this public source
-completed one `stress_structure` call with a Free account. Its response passed
-the existing output validator: one ChatGPT conversation request and zero native
-fallback requests. The preview used an already configured credential owner;
-this does not verify a fresh deployment's initial login. The private proof is
-not included in this repository. Automated tests
-exercise all eight routes, direct fallback, encrypted credential storage, and
-renewal using synthetic fixtures. These are bounded checks, not a quality or
-availability certification.
+Public verification uses synthetic fixtures in `test/gpt-primary.test.ts`,
+`test/gpt-transport.test.ts`, `test/gpt-account.test.ts`, and
+`test/chatgpt-setup-script.test.ts`. These cover all eight routes, direct
+fallback, response handling, encrypted credential persistence, PKCE, renewal,
+and setup-helper boundaries. Plan labels in those fixtures are synthetic;
+they do not establish live Free, Plus, or Pro account compatibility. The
+public test suite does not certify live sign-in, quality, availability, or
+quota accounting.
 
 ## Canary configurations
 

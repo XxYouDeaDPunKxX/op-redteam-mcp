@@ -175,7 +175,7 @@ async function initialLogin(gateway, signal) {
           console.log(JSON.stringify(result, null, 2)); resolve();
         } catch (error) { clearTimeout(timer); response.writeHead(502).end("Login exchange failed. Return to the terminal."); reject(error); }
       });
-      console.log("Choose your own ChatGPT account in the browser. Passwords and codes stay on OpenAI's page.");
+      console.log("Choose your ChatGPT account and complete sign-in in the browser. The authorization code returns to this helper for exchange in your Worker.");
       console.log(authorization.toString()); openBrowser(authorization.toString());
     });
   } finally { await new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }); }
