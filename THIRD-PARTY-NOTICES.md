@@ -1,6 +1,6 @@
 # Third-party notices
 
-OP Adversarial Pressure MCP is licensed under MIT; see [LICENSE](LICENSE).
+OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges is licensed under MIT; see [LICENSE](LICENSE).
 The package-lock records these license identifiers for the direct runtime
 dependencies:
 

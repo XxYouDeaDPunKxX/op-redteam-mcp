@@ -1,7 +1,7 @@
 # Optional ChatGPT model provider
 
 This guide configures ChatGPT as the model provider behind all eight tools in
-OP Adversarial Pressure MCP. Your calling assistant can run in any host that
+OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges. Your calling assistant can run in any host that
 supports the server's remote MCP transport and authentication flow. Choosing
 ChatGPT as the provider is separate from choosing that host.
 
@@ -12,7 +12,7 @@ route. Both attempts stay inside the same MCP tool call.
 
 ## Before you start
 
-Complete the regular [remote deployment](GETTING-STARTED.md#4-prepare-a-remote-deployment)
+Complete the regular [remote deployment](GETTING-STARTED.md)
 first. You need the deployed Worker, its Durable Object migration, and the
 normal NVIDIA and OpenRouter fallback credentials. This account route runs in
 your Cloudflare Worker; it does not run the model on your computer.
@@ -28,7 +28,7 @@ and account limits before use.
 
 The commands below authorize the backend account used for model reviews.
 Your MCP host connects to the Worker separately, using GitHub sign-in and the
-`review:invoke` scope. Follow [Connect your MCP client](GETTING-STARTED.md#5-connect-your-mcp-client)
+`review:invoke` scope. Follow [Connect your assistant](GETTING-STARTED.md)
 for that connection, regardless of the selected model provider.
 
 ## Enable the route
@@ -51,7 +51,7 @@ migration must include tag `chatgpt-account-v1`. The project deployment
 template includes these declarations. Keep the standard `COOKIE_ENCRYPTION_KEY`
 and `IDENTITY_HMAC_KEY` secrets configured as described in the deployment
 guide. The account session and pending PKCE state are encrypted in the bound
-Cloudflare Durable Object; model request packets are not stored there.
+Cloudflare Durable Object; tool inputs are not stored there.
 
 Deploy the updated Worker and migration using the regular deployment steps.
 This creates or updates a real Cloudflare resource and may have service costs.

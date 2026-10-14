@@ -1,7 +1,7 @@
 # Model and adapter evidence
 
 This document records which provider adapters and models are configured for
-OP Adversarial Pressure MCP, which tools use them, and what evidence is
+OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges, which tools use them, and what evidence is
 currently available.
 
 Three kinds of information are kept separate:
