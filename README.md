@@ -1,5 +1,5 @@
 ![OP Adversarial MCP banner](assets/Immagine%20ChatGPT%209%20ott%202026%2C%2020_32_25.png)
-
+[![M8ven Score](https://m8ven.ai/badge/mcp/xxyoudeadpunkxx-op-redteam-mcp-bidoiw?v=85fce211a9776fee9fcd7dc7cc441b2f)](https://m8ven.ai/mcp/xxyoudeadpunkxx-op-redteam-mcp-bidoiw?s=readme)
 # OP_Adversarial_Pressure/Bounded_Tests/Targeted_Challenges
 
 Bounded structural stress, sparring, premortem, and abuse-path tests on one target. GPT calls one tool, triages its candidate, then develops only surviving signal; no auto-retry or decisions.
