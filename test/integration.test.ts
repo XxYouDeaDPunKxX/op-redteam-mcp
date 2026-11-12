@@ -561,7 +561,7 @@ describe("stateless MCP Worker integration", () => {
       payload.result.tools.every((tool) =>
         /The calling model must (?:triage|classify)/.test(String((tool.outputSchema as { description?: string }).description))),
     ).toBe(true);
-    expect(payload.result.tools.every((tool) => !("idempotentHint" in (tool.annotations as object)))).toBe(true);
+    expect(payload.result.tools.every((tool) => (tool.annotations as { idempotentHint?: boolean }).idempotentHint === false)).toBe(true);
   });
 
   it("executes and projects one adversarial review", async () => {
